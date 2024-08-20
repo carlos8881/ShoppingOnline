@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" contnet="width=device-width, initial-scale=1.0">
+    <title>Shopping Online</title>
+    <link rel="stylesheet" href="style.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <header class="headcontent" id="headApp">
+        <div class="topmenu">
+            <ul class="left">
+                <li><a href="index.html">首頁</a></li>
+            </ul>
+        </div>
+    </header>
+    <div class="login-container">
+        <div class="login-interface" id="login-interface">
+            <div id="login-form">
+                <h1>歡迎登入</h1>
+                <div>尚未註冊帳號?<a href="#" onclick="toggleForm('showRegister')">點擊註冊</a></div>
+                <form action="">
+                    <div class="input">
+                        <label for="account">帳號</label>
+                        <input type="text" id="account" name="account" placeholder="請輸入帳號">
+                    </div>
+                    <div class="input">
+                        <label for="password">密碼</label>
+                        <input type="password" id="password" name="password" placeholder="請輸入密碼">
+                    </div>
+                    <div class="remember">
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">記住我</label>
+                    </div>
+                    <div>
+                        <a href="">忘記密碼?</a>
+                    </div>
+                    <button type="button" onclick="validateAndLogin()">登入</button>
+                </form>
+                <div>
+                    <div>使用社群帳號登入</div>
+                    <div>
+                        <button id="google-login"><i class='bx bxl-google bx-md'></i></button>
+                    </div>
+                </div>
+            </div>
+            <div id="register-form" style="display: none;">
+                <h1>註冊帳號</h1>
+                <div>已經有帳號了?<a href="#" onclick="toggleForm('showLogin')">點擊登入</a></div>
+                <form action="">
+                    <div class="input">
+                        <label for="new-account">帳號</label>
+                        <input type="text" id="new-account" name="new-account" placeholder="請輸入帳號">
+                    </div>
+                    <div class="input">
+                        <label for="new-password">密碼</label>
+                        <input type="password" id="new-password" name="new-password" placeholder="請輸入密碼">
+                    </div>
+                    <div class="input">
+                        <label for="new-phone-number">手機號碼</label>
+                        <input type="text" id="new-phone-number" name="new-phone-number" placeholder="請輸入手機號碼">
+                    </div>
+                    <div class="input">
+                        <label for="new-email">電子郵件</label>
+                        <input type="text" id="new-email" name="new-email" placeholder="請輸入電子郵件信箱">
+                    </div>
+                    <button type="button" onclick="validateAndRegister()">註冊</button>
+                </form>
+            </div>
+            <div id="email-verify" style="display: none;">
+                <h1>驗證</h1>
+                <div>請驗證電子信箱完成註冊 <a href="#" onclick="toggleForm('showLogin')">驗證後轉跳登入</a></div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer-container">
+        <div class="footer">
+            <div class="footer-logo">
+                <img src="images/logo.png" alt="logo">
+            </div>
+            <div class="footer-text">
+                <p>公司地址：台北市信義區信義路五段7749號</p>
+                <p>客服專線：0800-123-456</p>
+                <p>客服信箱：
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="js/app.js"></script>
+    <script src="js/member.js"></script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+        
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyCU6mFiRzObF0S2fsXjLQ8piixgjciGd8E",
+            authDomain: "shoppingonline-e3a20.firebaseapp.com",
+            projectId: "shoppingonline-e3a20",
+            storageBucket: "shoppingonline-e3a20.appspot.com",
+            messagingSenderId: "149059140486",
+            appId: "1:149059140486:web:99bd0da10985923a094a07",
+            measurementId: "G-LYK5LH69H6"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        // Google 登录
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
+        document.getElementById('google-login').addEventListener('click', () => {
+            signInWithPopup(auth, googleProvider)
+            .then((result) => {
+                // 登录成功
+                const user = result.user;
+                console.log('Google 登入成功:', user);
+
+                // 呼叫新的 API 端點
+                fetch('http://localhost:3000/google-login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ account: user.displayName })
+                })
+                .then(response => response.text())
+                .then(data => {
+                    alert(data);
+                    if (data === 'Google login successful') {
+                        localStorage.setItem('account', user.displayName);
+                        window.location.href = 'index.html';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error logging in with Google');
+                });
+            })
+            .catch((error) => {
+                // 登录失败
+                console.error('Google 登入失敗:', error);
+            });
+        });
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const savedAccount = localStorage.getItem('savedAccount');
+            if (savedAccount) {
+                document.getElementById('account').value = savedAccount;
+                document.getElementById('remember').checked = true;
+            }
+            // Check URL parameters to show the register form if needed
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('form') === 'register') {
+                toggleForm('showRegister');
+            }
+        });
+    </script>
+</body>
+</html>

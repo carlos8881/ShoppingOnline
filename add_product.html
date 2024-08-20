@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加新商品</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>添加新商品</h1>
+    </header>
+    <main>
+        <div id="app">
+            <form id="addProductForm">
+                <div>
+                    <label for="cover_image">商品封面圖:</label>
+                    <input type="file" id="cover_image" name="cover_image" accept="image/*" required>
+                </div>
+                <div>
+                    <label for="content_images">商品內容圖:</label>
+                    <input type="file" id="content_images" name="content_images" accept="image/*" multiple required>
+                </div>
+                <div>
+                    <label for="name">商品名稱:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div>
+                    <label for="description">商品描述:</label>
+                    <textarea id="description" name="description"></textarea>
+                </div>
+                <div>
+                    <label for="base_price">價格:</label>
+                    <input type="number" id="base_price" name="base_price" step="0.01" required>
+                </div>
+                <div>
+                    <label for="main_category">主分類:</label>
+                    <select id="main_category" v-model="selectedMainCategory" @change="fetchSubCategories" required>
+                        <option v-for="category in mainCategories" :value="category.id">{{ category.name }}</option>
+                    </select>
+                </div>
+                <div v-if="subCategories.length > 0">
+                    <label for="sub_category">子分類:</label>
+                    <select id="sub_category" v-model="selectedSubCategory" required>
+                        <option v-for="category in subCategories" :value="category.id">{{ category.name }}</option>
+                    </select>
+                </div>
+                <button type="submit">添加商品</button>
+            </form>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="js/add_product_app.js"></script>
+</body>
+</html>
