@@ -19,7 +19,7 @@
                 </div>
                 <div>
                     <label for="content_images">商品內容圖:</label>
-                    <input type="file" id="content_images" name="content_images" accept="image/*" multiple required>
+                    <input type="file" id="content_images" name="content_images" accept="image/*" multiple>
                 </div>
                 <div>
                     <label for="name">商品名稱:</label>
@@ -35,14 +35,14 @@
                 </div>
                 <div>
                     <label for="main_category">主分類:</label>
-                    <select id="main_category" v-model="selectedMainCategory" @change="fetchSubCategories" required>
-                        <option v-for="category in mainCategories" :value="category.id">{{ category.name }}</option>
+                    <select id="main_category" name="main_category" required>
+                        <!-- 主分類選項將由 JavaScript 動態生成 -->
                     </select>
                 </div>
-                <div v-if="subCategories.length > 0">
+                <div id="sub_category_container" style="display: none;">
                     <label for="sub_category">子分類:</label>
-                    <select id="sub_category" v-model="selectedSubCategory" required>
-                        <option v-for="category in subCategories" :value="category.id">{{ category.name }}</option>
+                    <select id="sub_category" name="sub_category" required>
+                        <!-- 子分類選項將由 JavaScript 動態生成 -->
                     </select>
                 </div>
                 <button type="submit">添加商品</button>

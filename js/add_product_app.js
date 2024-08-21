@@ -1,58 +1,79 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const mainCategorySelect = document.getElementById('main_category');
+    const subCategoryContainer = document.getElementById('sub_category_container');
+    const subCategorySelect = document.getElementById('sub_category');
 
-document.getElementById('addProductForm').addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const data = Object.fromEntries(formData.entries());
+    let categories = [];
+    let mainCategories = [];
+    let subCategories = [];
 
-    const response = await fetch('/api/products', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+    // Fetch categories from the server
+    fetch('http://localhost:3000/get_categories_for_add_product')
+        .then(response => response.json())
+        .then(data => {
+            categories = data;
+            mainCategories = categories.filter(category => category.parent_id === null);
+            populateMainCategories();
+        })
+        .catch(error => {
+            console.error('Error fetching categories:', error);
+        });
+
+    // Populate main categories
+    function populateMainCategories() {
+        mainCategories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category.id;
+            option.textContent = category.name;
+            mainCategorySelect.appendChild(option);
+        });
+        console.log('Main Categories:', mainCategories); // 調試輸出
+    }
+
+    // Event listener for main category change
+    mainCategorySelect.addEventListener('change', () => {
+        const selectedMainCategoryId = mainCategorySelect.value;
+        if (selectedMainCategoryId) {
+            subCategories = categories.filter(category => category.parent_id == selectedMainCategoryId);
+            populateSubCategories();
+            subCategoryContainer.style.display = subCategories.length > 0 ? 'block' : 'none';
+        } else {
+            subCategoryContainer.style.display = 'none';
+        }
     });
 
-    if (response.ok) {
-        alert('新商品添加成功');
-    } else {
-        alert('添加商品失敗');
+    // Populate sub categories
+    function populateSubCategories() {
+        subCategorySelect.innerHTML = ''; // Clear previous options
+        subCategories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category.id;
+            option.textContent = category.name;
+            subCategorySelect.appendChild(option);
+        });
+        console.log('Sub Categories:', subCategories); // 調試輸出
     }
-});
 
-new Vue({
-    el: '#app',
-    data: {
-        categories: [],
-        mainCategories: [],
-        subCategories: [],
-        selectedMainCategory: null,
-        selectedSubCategory: null
-    },
-    created() {
-        this.fetchCategories();
-    },
-    methods: {
-        fetchCategories() {
-            fetch('http://localhost:3000/get_categories_for_add_product')
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Raw Data:', data);
-                    this.categories = data;
-                    this.mainCategories = data.filter(category => category.parent_id === null);
-                    console.log('Main Categories:', this.mainCategories);
-                })
-                .catch(error => {
-                    console.error('Error fetching categories:', error);
-                });
-        },
-        fetchSubCategories() {
-            console.log('Selected Main Category:', this.selectedMainCategory);
-            if (this.selectedMainCategory !== null) {
-                this.subCategories = this.categories.filter(category => category.parent_id === this.selectedMainCategory);
-                console.log('Sub Categories:', this.subCategories);
-            } else {
-                this.subCategories = [];
-            }
+    // Form submission handler
+    document.getElementById('addProductForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const data = Object.fromEntries(formData.entries());
+
+        console.log('Form Data:', data); // 調試輸出
+
+        const response = await fetch('http://localhost:3000/add-products', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            alert('新商品添加成功');
+        } else {
+            alert('添加商品失敗');
         }
-    }
+    });
 });
