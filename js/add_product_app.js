@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let mainCategories = [];
     let subCategories = [];
 
+    // *注入式攻擊或其他安全措施未設置
     // Fetch categories from the server
     fetch('http://localhost:3000/get_categories_for_add_product')
         .then(response => response.json())
