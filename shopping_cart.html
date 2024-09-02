@@ -2,21 +2,47 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" contnet="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Online 購物車</title>
     <link rel="stylesheet" href="style.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
     <header class="headcontent" id="headApp">
-        <div class="topmenu">
-            <ul class="left">
-                <li><a href="index.html">首頁</a></li>
-            </ul>
+        <div class="logo">
+            <a href="index.html">
+                <img src="images/logo.png" alt="logo">
+            </a>
+        </div>
+        <div>
+            <h2>購物車</h2>
         </div>
     </header>
+    <div>
+        <input type="checkbox" id="select-all">
+        <label for="select-all">全選</label>
+        <div>
+            單價
+        </div>
+        <div>
+            數量
+        </div>
+        <div>
+            總計
+        </div>
+    </div>
+    <div class="cart-container">
+        <!-- 購物車內容將由 JavaScript 動態生成 -->
+    </div>
+    <div class="checkout-details">
+        <h2>結帳明細</h2>
+        <p>已選: <span id="total-quantity">0</span></p>
+        <p>商品原價: <span id="total-price">0</span></p>
+        <p>結帳金額: <span id="checkout-price">0</span></p>
+        <button id="checkout-button">結帳</button>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-    <script src="js/app.js"></script>
     <script src="js/member.js"></script>
+    <script src="js/shopping_cart.js"></script>
 </body>
 </html>

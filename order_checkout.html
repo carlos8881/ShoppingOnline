@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Online 結帳</title>
+    <link rel="stylesheet" href="style.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <header class="headcontent" id="headApp">
+        <div class="logo">
+            <a href="index.html">
+                <img src="images/logo.png" alt="logo">
+            </a>
+        </div>
+        <div>
+            <h2>結帳</h2>
+        </div>
+    </header>
+    <div>
+        <div>
+            <h3>訂單商品</h3>
+            <p>單價</p>
+            <p>數量</p>
+            <p>總價</p>
+        </div>
+        <div id="order-items-container">
+            <!-- 訂單商品內容將由 JavaScript 動態生成 -->
+        </div>
+        <div>
+            <h3>寄送方式</h3>
+            <label for="delivery-method">配送方式:</label>
+            <select id="delivery-method">
+                <option value="store-pickup" data-price="60">超商取貨 (+60元)</option>
+                <option value="home-delivery" data-price="100">宅配 (+100元)</option>
+            </select>
+        </div>
+    </div>
+    <div>
+        <p>商品總價: <span id="total-price">0</span></p>
+        <p>運費: <span id="delivery-price">0</span></p>
+        <p>總付款金額: <span id="checkout-price">0</span></p>
+        <button id="place-order-button">下訂單</button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="js/member.js"></script>
+    <script src="js/order_checkout.js"></script>
+</body>
+</html>

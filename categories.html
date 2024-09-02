@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" contnet="width=device-width, initial-scale=1.0">
-    <title>Shopping Online "商品頁面(品名)"</title>
+    <title>Shopping Online </title>
     <link rel="stylesheet" href="style.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <!-- 商品個別頁面 -->
 </head>
 <body>
     <header class="headcontent" id="headApp">
@@ -38,39 +37,13 @@
             </div>
         </div>
         <div class="category">
+            <!-- 分類區塊 -->
         </div>
     </header>
-    <div class="product-container">
-        <div class="product">
-            <div class="breadcrumb"></div> <!-- 新增分類導覽容器 -->
-            <h1>品名</h1>
-            <div class="product-img">
-                <img src="" alt="product_image">
-                <button id="prev-btn">上一張</button>
-                <button id="next-btn">下一張</button>
-            </div>
-            <!-- <p>顏色</p> 是否有變體 為True時顯示 -->
-            <!-- <p>型號</p> 是否有變體 為True時顯示 -->
-            <p class="price"></p>
-            <input type="number" id="quantity" placeholder="輸入數量" min="1" value="1">
-            <button id="add-to-cart">加入購物車</button>
-            <button>直接購買</button>
-            <p>付款方式</p>
-            <p>配送</p>
-        </div>
-        <div class="product-info">
-            <!-- <div class="">
-                <p>分類</p>
-                <p>其他各種標籤 如品牌、尺寸、型號、分類細項...等等</p>
-            </div> -->
-            <div class="product-description">
-                <h2>商品詳情</h2>
-                <p>1 <br>2 <br>3 <br>4</p>
-            </div>
-            <!-- <div class="">
-                <h2>規格說明</h2>
-                <p>1 <br>2 <br>3 <br>4</p>
-            </div> -->
+    <div class="all-products-container">
+        <div class="header"></div>
+        <div class="product-card-container">
+            <!-- 商品卡將由JavaScript動態生成 -->
         </div>
     </div>
     <footer class="footer-container">
@@ -87,7 +60,7 @@
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="js/app.js"></script>
-    <script src="js/member.js"></script>
-    <script src="js/products.js"></script>
+    <script src="js/categories.js"></script>
+    <button id="to-prev-next"><i class='bx bx-chevron-down bx-md'></i></button>
 </body>
 </html>

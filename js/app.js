@@ -37,43 +37,79 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener("DOMContentLoaded", function() {
   fetch('http://localhost:3000/get_categories')
-      .then(response => response.json())
-      .then(data => {
-          const categoryContainer = document.querySelector('.category');
-          categoryContainer.innerHTML = ''; // 清空现有分类
+    .then(response => response.json())
+    .then(data => {
+        const categoryContainer = document.querySelector('.category');
+        categoryContainer.innerHTML = ''; // 清空现有分类
 
-          data.forEach(category => {
-              const categoryDiv = document.createElement('div');
-              const categoryLink = document.createElement('a');
-              categoryLink.href = '#';
-              categoryLink.textContent = category.name;
-              categoryDiv.appendChild(categoryLink);
+        data.forEach(category => {
+            const categoryDiv = document.createElement('div');
+            const categoryLink = document.createElement('a');
+            categoryLink.href = `categories.html?category_id=${category.id}`;
+            categoryLink.textContent = category.name;
+            categoryDiv.appendChild(categoryLink);
 
-              if (category.subcategories.length > 0) {
-                  const subcategoryList = document.createElement('div');
-                  subcategoryList.classList.add('subcategory-list');
-                  subcategoryList.style.display = 'none'; // 初始隐藏子分类
+            if (category.subcategories.length > 0) {
+                const subcategoryList = document.createElement('div');
+                subcategoryList.classList.add('subcategory-list');
+                subcategoryList.style.display = 'none'; // 初始隐藏子分类
 
-                  category.subcategories.forEach(subcategory => {
-                      const subcategoryLink = document.createElement('a');
-                      subcategoryLink.href = '#';
-                      subcategoryLink.textContent = subcategory.name;
-                      subcategoryList.appendChild(subcategoryLink);
-                  });
+                category.subcategories.forEach(subcategory => {
+                    const subcategoryLink = document.createElement('a');
+                    subcategoryLink.href = `categories.html?category_id=${subcategory.id}`;
+                    subcategoryLink.textContent = subcategory.name;
+                    subcategoryList.appendChild(subcategoryLink);
+                });
 
-                  categoryDiv.appendChild(subcategoryList);
+                categoryDiv.appendChild(subcategoryList);
 
-                  // 添加鼠标悬停事件
-                  categoryDiv.addEventListener('mouseenter', () => {
-                      subcategoryList.style.display = 'block';
-                  });
+                // 添加鼠标悬停事件
+                categoryDiv.addEventListener('mouseenter', () => {
+                    subcategoryList.style.display = 'block';
+                });
 
-                  categoryDiv.addEventListener('mouseleave', () => {
-                      subcategoryList.style.display = 'none';
-                  });
-              }
+                categoryDiv.addEventListener('mouseleave', () => {
+                    subcategoryList.style.display = 'none';
+                });
+            }
 
-              categoryContainer.appendChild(categoryDiv);
-          });
-      });
+            categoryContainer.appendChild(categoryDiv);
+        });
+    });
+
+  // Fetch products and populate product cards
+  fetch('http://localhost:3000/get-products')
+    .then(response => response.json())
+    .then(products => {
+        const productCardContainer = document.querySelector('.product-card-container');
+        productCardContainer.innerHTML = ''; // 清空现有商品卡
+
+        products.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.classList.add('product-card');
+
+            const productLink = document.createElement('a');
+            productLink.href = `product.html?id=${product.id}`;
+
+            const productImage = document.createElement('img');
+            productImage.src = product.image_url;
+            productImage.alt = product.name;
+
+            const productName = document.createElement('div');
+            productName.classList.add('name');
+            productName.textContent = product.name;
+
+            const productPrice = document.createElement('div');
+            productPrice.classList.add('price');
+            productPrice.textContent = `NT$ ${product.base_price}`;
+
+            productLink.appendChild(productImage);
+            productLink.appendChild(productName);
+
+            productCard.appendChild(productLink);
+            productCard.appendChild(productPrice);
+
+            productCardContainer.appendChild(productCard);
+        });
+    });
 });

@@ -59,16 +59,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('addProductForm').addEventListener('submit', async (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
-        const data = Object.fromEntries(formData.entries());
 
-        console.log('Form Data:', data); // 調試輸出
+        console.log('Form Data:', formData); // 調試輸出
 
         const response = await fetch('http://localhost:3000/add-products', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
+            body: formData
         });
 
         if (response.ok) {
