@@ -15,17 +15,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 const totalPriceElement = document.getElementById('total-price');
                 const checkoutPriceElement = document.getElementById('checkout-price');
                 const selectAllCheckbox = document.getElementById('select-all');
-
+    
                 cartContainer.innerHTML = ''; // 清空现有购物车内容
                 let totalQuantity = 0;
                 let totalPrice = 0;
-
+    
                 cartItems.forEach(item => {
                     const itemTotal = item.price * item.quantity;
-
+    
                     const itemDiv = document.createElement('div');
                     itemDiv.classList.add('cart-item');
-
+    
                     itemDiv.innerHTML = `
                         <input type="checkbox" class="select-item" data-product-id="${item.product_id}">
                         <img src="${item.image_url}" alt="${item.name}">
@@ -37,15 +37,15 @@ document.addEventListener('DOMContentLoaded', function () {
                         <button class="increase-quantity" data-product-id="${item.product_id}">+</button>
                         <button class="remove-item" data-product-id="${item.product_id}">刪除</button>
                     `;
-
+    
                     cartContainer.appendChild(itemDiv);
                 });
-
+    
                 // 初始化結帳明細
                 totalQuantityElement.textContent = 0;
                 totalPriceElement.textContent = 0;
                 checkoutPriceElement.textContent = 0;
-
+    
                 // 添加事件監聽器
                 document.querySelectorAll('.decrease-quantity').forEach(button => {
                     button.addEventListener('click', function () {
@@ -53,21 +53,21 @@ document.addEventListener('DOMContentLoaded', function () {
                         updateCartItemQuantity(productId, -1);
                     });
                 });
-
+    
                 document.querySelectorAll('.increase-quantity').forEach(button => {
                     button.addEventListener('click', function () {
                         const productId = this.getAttribute('data-product-id');
                         updateCartItemQuantity(productId, 1);
                     });
                 });
-
+    
                 document.querySelectorAll('.remove-item').forEach(button => {
                     button.addEventListener('click', function () {
                         const productId = this.getAttribute('data-product-id');
                         removeCartItem(productId);
                     });
                 });
-
+    
                 document.querySelectorAll('.select-item').forEach(checkbox => {
                     checkbox.addEventListener('change', function () {
                         updateCheckoutDetails();
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         selectAllCheckbox.checked = document.querySelectorAll('.select-item:checked').length === document.querySelectorAll('.select-item').length;
                     });
                 });
-
+    
                 selectAllCheckbox.addEventListener('change', function () {
                     const isChecked = this.checked;
                     document.querySelectorAll('.select-item').forEach(checkbox => {
