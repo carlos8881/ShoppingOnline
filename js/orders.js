@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    fetch(`http://localhost:3000/get-orders?account=${account}`)
+    fetch(`http://3.112.202.79:3000/get-orders?account=${account}`)
         .then(response => response.json())
         .then(orders => {
             const ordersContainer = document.getElementById('orders-container');

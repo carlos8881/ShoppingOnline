@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-  fetch('http://localhost:3000/get_categories')
+  fetch('http://3.112.202.79:3000/get_categories')
     .then(response => response.json())
     .then(data => {
         const categoryContainer = document.querySelector('.category');
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
   // Fetch products and populate product cards
-  fetch('http://localhost:3000/get-products')
+  fetch('http://3.112.202.79:3000/get-products')
     .then(response => response.json())
     .then(products => {
         const productCardContainer = document.querySelector('.product-card-container');

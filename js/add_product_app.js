@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // *注入式攻擊或其他安全措施未設置
     // Fetch categories from the server
-    fetch('http://localhost:3000/get_categories_for_add_product')
+    fetch('http://3.112.202.79:3000/get_categories_for_add_product')
         .then(response => response.json())
         .then(data => {
             categories = data;
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         console.log('Form Data:', formData); // 調試輸出
 
-        const response = await fetch('http://localhost:3000/add-products', {
+        const response = await fetch('http://3.112.202.79:3000/add-products', {
             method: 'POST',
             body: formData
         });
