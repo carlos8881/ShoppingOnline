@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    fetch(`http://3.112.202.79:3000/get-cart?account=${account}`)
+    fetch(`https://d1khcxe0f8g5xw.cloudfront.net/get-cart?account=${account}`)
         .then(response => response.json())
         .then(cartItems => {
             const orderItemsContainer = document.getElementById('order-items-container');
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('place-order-button').addEventListener('click', function () {
                 const deliveryMethod = deliveryMethodSelect.value;
 
-                fetch('http://3.112.202.79:3000/checkout', {
+                fetch('https://d1khcxe0f8g5xw.cloudfront.net/checkout', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

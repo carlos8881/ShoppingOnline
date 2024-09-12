@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateCart() {
-        fetch(`http://3.112.202.79:3000/get-cart?account=${account}`)
+        fetch(`https://d1khcxe0f8g5xw.cloudfront.net/get-cart?account=${account}`)
             .then(response => response.json())
             .then(cartItems => {
                 const cartContainer = document.querySelector('.cart-container');
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateCartItemQuantity(productId, change) {
-        fetch('http://3.112.202.79:3000/update-cart-item', {
+        fetch('https://d1khcxe0f8g5xw.cloudfront.net/update-cart-item', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function removeCartItem(productId, updateCartAfterRemoval = true) {
-        fetch('http://3.112.202.79:3000/remove-cart-item', {
+        fetch('https://d1khcxe0f8g5xw.cloudfront.net/remove-cart-item', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

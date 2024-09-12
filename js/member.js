@@ -67,7 +67,7 @@ function validateAndRegister() {
         const phoneNumber = document.getElementById('new-phone-number').value;
         const email = document.getElementById('new-email').value;
 
-        fetch('http://localhost:3000/register', {
+        fetch('https://d1khcxe0f8g5xw.cloudfront.net/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -101,7 +101,7 @@ function validateAndLogin() {
     const password = document.getElementById('password').value;
     const remember = document.getElementById('remember').checked;
 
-    fetch('http://localhost:3000/login', {
+    fetch('https://d1khcxe0f8g5xw.cloudfront.net/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

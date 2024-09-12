@@ -6,11 +6,11 @@ const multer = require('multer');
 const multerS3 = require('multer-s3');
 const { S3Client } = require('@aws-sdk/client-s3');
 const crypto = require('crypto');
+const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.use(bodyParser.json());
-app.use(express.static('public'));
 app.use(cors());
 
 const db = mysql.createConnection({
