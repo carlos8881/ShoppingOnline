@@ -23,10 +23,6 @@ const db = mysql.createConnection({
 
 const s3Client = new S3Client({
     region: 'ap-northeast-1',
-    credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
-    }
 });
 
 const upload = multer({
@@ -96,7 +92,7 @@ app.post('/google-login', (req, res) => {
 
 // 處理添加商品的請求
 app.post('/add-products', upload.fields([{ name: 'cover_image', maxCount: 1 }, { name: 'content_images', maxCount: 8 }]), (req, res) => {
-    const { name, description, base_price, main_category, sub_category } = req.body;
+    const { name, description, base_price, main_category, sub_category, has_variants } = req.body;
     const coverImage = req.files['cover_image'] ? req.files['cover_image'][0].location : null;
     const contentImages = req.files['content_images'] ? req.files['content_images'].map(file => file.location) : [];
 
@@ -104,8 +100,8 @@ app.post('/add-products', upload.fields([{ name: 'cover_image', maxCount: 1 }, {
         return res.status(400).send('封面圖片是必需的');
     }
 
-    const productQuery = 'INSERT INTO products (name, description, base_price) VALUES (?, ?, ?)';
-    db.query(productQuery, [name, description, base_price], (err, result) => {
+    const productQuery = 'INSERT INTO products (name, description, base_price, has_variants) VALUES (?, ?, ?, ?)';
+    db.query(productQuery, [name, description, base_price, has_variants === 'on'], (err, result) => {
         if (err) {
             console.error('Error inserting product:', err);
             return res.status(500).send('添加商品失敗');
@@ -113,34 +109,54 @@ app.post('/add-products', upload.fields([{ name: 'cover_image', maxCount: 1 }, {
 
         const productId = result.insertId;
         const categoryQuery = 'INSERT INTO product_categories (product_id, category_id) VALUES (?, ?)';
-        
+
         // 插入主分類
         db.query(categoryQuery, [productId, main_category], (err, result) => {
             if (err) {
-                console.error('Error inserting product main category:', err);
-                return res.status(500).send('添加商品主分類失敗');
+                console.error('Error inserting main category:', err);
+                return res.status(500).send('添加主分類失敗');
             }
 
             // 插入子分類
             db.query(categoryQuery, [productId, sub_category], (err, result) => {
                 if (err) {
-                    console.error('Error inserting product sub category:', err);
-                    return res.status(500).send('添加商品子分類失敗');
+                    console.error('Error inserting sub category:', err);
+                    return res.status(500).send('添加子分類失敗');
                 }
 
-                // 插入封面圖片和內容圖片
-                const allImages = [{ url: coverImage, isCover: true }, ...contentImages.map(url => ({ url, isCover: false }))];
-                const contentImageQuery = 'INSERT INTO product_images (product_id, image_url, is_cover) VALUES ?';
-                const contentImageValues = allImages.map(image => [productId, image.url, image.isCover]);
+                // 插入變體信息
+                if (has_variants === 'on') {
+                    const variantNames = req.body.variant1_name;
+                    const variantValues = req.body.variant1_values;
+                    const variantStocks = req.body.variant1_stock;
+                    const variantPrices = req.body.variant1_price;
 
-                db.query(contentImageQuery, [contentImageValues], (err, result) => {
-                    if (err) {
-                        console.error('Error inserting images:', err);
-                        return res.status(500).send('添加圖片失敗');
-                    }
+                    const variantQuery = 'INSERT INTO product_variants (product_id, variant_name, variant_value) VALUES ?';
+                    const variantData = variantValues.map((value, index) => [productId, variantNames, value]);
 
-                    res.send('新商品添加成功');
-                });
+                    db.query(variantQuery, [variantData], (err, result) => {
+                        if (err) {
+                            console.error('Error inserting variants:', err);
+                            return res.status(500).send('添加變體失敗');
+                        }
+
+                        const variantIds = result.insertId;
+
+                        const attributeQuery = 'INSERT INTO variant_attributes (variant_id, stock, price) VALUES ?';
+                        const attributeData = variantValues.map((value, index) => [variantIds + index, variantStocks[index], variantPrices[index]]);
+
+                        db.query(attributeQuery, [attributeData], (err, result) => {
+                            if (err) {
+                                console.error('Error inserting variant attributes:', err);
+                                return res.status(500).send('添加變體屬性失敗');
+                            }
+
+                            res.status(200).send('商品添加成功');
+                        });
+                    });
+                } else {
+                    res.status(200).send('商品添加成功');
+                }
             });
         });
     });
