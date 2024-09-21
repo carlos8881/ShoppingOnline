@@ -255,7 +255,7 @@ app.get('/get-products', (req, res) => {
 app.get('/get-product-info', (req, res) => {
     const productId = req.query.id;
     const query = `
-        SELECT p.name, p.base_price, p.description, pi.image_url
+        SELECT p.name, p.base_price, p.description, p.has_variants, pi.image_url
         FROM products p
         JOIN product_images pi ON p.id = pi.product_id
         WHERE p.id = ? AND pi.is_cover = 1
@@ -285,6 +285,23 @@ app.get('/get-product-images', (req, res) => {
         if (err) {
             console.error('Error fetching product images:', err);
             res.status(500).send('Error fetching product images');
+            return;
+        }
+        res.json(results);
+    });
+});
+
+app.get('/get-product-variants', (req, res) => {
+    const productId = req.query.id;
+    const query = `
+        SELECT v.id, v.variant_combination, v.price
+        FROM product_variants v
+        WHERE v.product_id = ?
+    `;
+    db.query(query, [productId], (err, results) => {
+        if (err) {
+            console.error('Error fetching product variants:', err);
+            res.status(500).send('Error fetching product variants');
             return;
         }
         res.json(results);
@@ -331,7 +348,7 @@ app.get('/get-product-categories', (req, res) => {
 });
 
 app.post('/add-to-cart', (req, res) => {
-    const { account, product_id, quantity } = req.body;
+    const { account, product_id, variant_id, quantity } = req.body;
 
     const getUserQuery = 'SELECT id FROM users WHERE account = ?';
     db.query(getUserQuery, [account], (err, results) => {
@@ -348,11 +365,11 @@ app.post('/add-to-cart', (req, res) => {
 
         const userId = results[0].id;
         const addToCartQuery = `
-            INSERT INTO cart_items (user_id, product_id, quantity)
-            VALUES (?, ?, ?)
+            INSERT INTO cart_items (user_id, product_id, variant_id, quantity)
+            VALUES (?, ?, ?, ?)
             ON DUPLICATE KEY UPDATE quantity = quantity + VALUES(quantity)
         `;
-        db.query(addToCartQuery, [userId, product_id, quantity], (err, result) => {
+        db.query(addToCartQuery, [userId, product_id, variant_id, quantity], (err, result) => {
             if (err) {
                 console.error('Error adding to cart:', err);
                 res.status(500).send('Error adding to cart');
@@ -381,9 +398,12 @@ app.get('/get-cart', (req, res) => {
 
         const userId = results[0].id;
         const getCartQuery = `
-            SELECT ci.product_id, ci.quantity, p.name, p.base_price AS price, pi.image_url
+            SELECT ci.product_id, ci.variant_id, ci.quantity, p.name, 
+                   COALESCE(v.price, p.base_price) AS price, 
+                   v.variant_combination, pi.image_url
             FROM cart_items ci
             JOIN products p ON ci.product_id = p.id
+            LEFT JOIN product_variants v ON ci.variant_id = v.id
             JOIN product_images pi ON p.id = pi.product_id AND pi.is_cover = 1
             WHERE ci.user_id = ?
         `;
@@ -524,66 +544,50 @@ app.post('/checkout', (req, res) => {
         }
 
         const userId = results[0].id;
-        const getCartItemsQuery = `
-            SELECT ci.product_id, ci.quantity, p.base_price AS price
-            FROM cart_items ci
-            JOIN products p ON ci.product_id = p.id
-            WHERE ci.user_id = ?
+
+        let totalPrice = 0;
+        selectedItems.forEach(item => {
+            totalPrice += item.price * item.quantity;
+        });
+
+        let deliveryPrice = 0;
+        if (deliveryMethod === 'store-pickup') {
+            deliveryPrice = 60;
+        } else if (deliveryMethod === 'home-delivery') {
+            deliveryPrice = 100;
+        }
+
+        const checkoutPrice = totalPrice + deliveryPrice;
+
+        // 生成訂單編號
+        const date = new Date();
+        const orderNumber = `${date.getFullYear().toString().slice(2)}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
+
+        const createOrderQuery = `
+            INSERT INTO orders (user_id, total_price, delivery_price, checkout_price, delivery_method, created_at, order_number)
+            VALUES (?, ?, ?, ?, ?, NOW(), ?)
         `;
-        db.query(getCartItemsQuery, [userId], (err, cartItems) => {
+        db.query(createOrderQuery, [userId, totalPrice, deliveryPrice, checkoutPrice, deliveryMethod, orderNumber], (err, result) => {
             if (err) {
-                console.error('Error fetching cart items:', err);
-                res.status(500).send('Error fetching cart items');
+                console.error('Error creating order:', err);
+                res.status(500).send('Error creating order');
                 return;
             }
 
-            let totalPrice = 0;
-            cartItems.forEach(item => {
-                const selectedItem = selectedItems.find(si => si.product_id === item.product_id);
-                if (selectedItem) {
-                    totalPrice += item.price * item.quantity;
-                }
-            });
-
-            let deliveryPrice = 0;
-            if (deliveryMethod === 'store-pickup') {
-                deliveryPrice = 60;
-            } else if (deliveryMethod === 'home-delivery') {
-                deliveryPrice = 100;
-            }
-
-            const checkoutPrice = totalPrice + deliveryPrice;
-
-            // 生成訂單編號
-            const date = new Date();
-            const orderNumber = `${date.getFullYear().toString().slice(2)}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
-
-            const createOrderQuery = `
-                INSERT INTO orders (user_id, total_price, delivery_price, checkout_price, delivery_method, created_at, order_number)
-                VALUES (?, ?, ?, ?, ?, NOW(), ?)
+            const orderId = result.insertId;
+            const createOrderItemsQuery = `
+                INSERT INTO order_items (order_id, product_id, variant_id, quantity, price)
+                VALUES ?
             `;
-            db.query(createOrderQuery, [userId, totalPrice, deliveryPrice, checkoutPrice, deliveryMethod, orderNumber], (err, result) => {
+            const orderItems = selectedItems.map(item => [orderId, item.product_id, item.variant_id, item.quantity, item.price]);
+            db.query(createOrderItemsQuery, [orderItems], (err, result) => {
                 if (err) {
-                    console.error('Error creating order:', err);
-                    res.status(500).send('Error creating order');
+                    console.error('Error creating order items:', err);
+                    res.status(500).send('Error creating order items');
                     return;
                 }
 
-                const orderId = result.insertId;
-                const createOrderItemsQuery = `
-                    INSERT INTO order_items (order_id, product_id, quantity, price)
-                    VALUES ?
-                `;
-                const orderItems = selectedItems.map(item => [orderId, item.product_id, item.quantity, item.price]);
-                db.query(createOrderItemsQuery, [orderItems], (err, result) => {
-                    if (err) {
-                        console.error('Error creating order items:', err);
-                        res.status(500).send('Error creating order items');
-                        return;
-                    }
-
-                    res.json({ success: true, totalPrice, deliveryPrice, checkoutPrice, orderNumber });
-                });
+                res.json({ success: true, totalPrice, deliveryPrice, checkoutPrice, orderNumber });
             });
         });
     });
@@ -608,10 +612,11 @@ app.get('/get-orders', (req, res) => {
         const userId = results[0].id;
         const getOrdersQuery = `
             SELECT o.id, o.total_price, o.delivery_price, o.checkout_price, o.delivery_method, o.created_at, o.order_number,
-                   oi.product_id, oi.quantity, oi.price, p.name, pi.image_url
+                   oi.product_id, oi.variant_id, oi.quantity, oi.price, p.name, pi.image_url, v.variant_combination
             FROM orders o
             JOIN order_items oi ON o.id = oi.order_id
             JOIN products p ON oi.product_id = p.id
+            LEFT JOIN product_variants v ON oi.variant_id = v.id
             JOIN product_images pi ON p.id = pi.product_id AND pi.is_cover = 1
             WHERE o.user_id = ?
             ORDER BY o.created_at DESC
@@ -639,10 +644,12 @@ app.get('/get-orders', (req, res) => {
                 }
                 orders[row.id].items.push({
                     product_id: row.product_id,
+                    variant_id: row.variant_id,
                     quantity: row.quantity,
                     price: row.price,
                     name: row.name,
-                    image_url: row.image_url
+                    image_url: row.image_url,
+                    variant_combination: row.variant_combination // 添加變體名稱
                 });
             });
 

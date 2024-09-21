@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     itemDiv.innerHTML = `
                         <img src="${item.image_url}" alt="${item.name}">
-                        <p>${item.name}</p>
+                        <p>${item.name} ${item.variant_combination ? `(${item.variant_combination})` : ''}</p>
                         <p>${item.price}</p>
                         <p>${item.quantity}</p>
                         <p>${item.price * item.quantity}</p>

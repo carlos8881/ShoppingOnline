@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 itemDiv.innerHTML = `
                     <img src="${item.image_url}" alt="${item.name}" class="order-item-image">
-                    <p>${item.name}</p>
+                    <p>${item.name} ${item.variant_combination ? `(${item.variant_combination})` : ''}</p>
                     <p>${item.price}</p>
                     <p>${item.quantity}</p>
                     <p>${itemTotal}</p>
@@ -35,18 +35,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 totalPrice += itemTotal;
             });
 
-            totalPriceElement.textContent = totalPrice;
+            totalPriceElement.textContent = totalPrice.toFixed(2); // 確保顯示兩位小數
 
             function updateCheckoutPrice() {
                 const deliveryPrice = parseInt(deliveryMethodSelect.selectedOptions[0].getAttribute('data-price'));
-                deliveryPriceElement.textContent = deliveryPrice;
-                checkoutPriceElement.textContent = totalPrice + deliveryPrice;
+                deliveryPriceElement.textContent = deliveryPrice.toFixed(2); // 確保顯示兩位小數
+                checkoutPriceElement.textContent = (totalPrice + deliveryPrice).toFixed(2); // 確保顯示兩位小數
             }
 
             deliveryMethodSelect.addEventListener('change', updateCheckoutPrice);
 
             document.getElementById('place-order-button').addEventListener('click', function () {
                 const deliveryMethod = deliveryMethodSelect.value;
+
+                // 確保 selectedItems 包含正確的變體價格
+                const selectedItems = cartItems.map(item => ({
+                    product_id: item.product_id,
+                    variant_id: item.variant_id,
+                    quantity: item.quantity,
+                    price: item.price
+                }));
 
                 fetch('https://d1khcxe0f8g5xw.cloudfront.net/checkout', {
                     method: 'POST',
@@ -55,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     body: JSON.stringify({
                         account: account,
-                        selectedItems: cartItems,
+                        selectedItems: selectedItems,
                         deliveryMethod: deliveryMethod
                     })
                 })

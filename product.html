@@ -42,16 +42,18 @@
     </header>
     <div class="product-container">
         <div class="product">
-            <div class="breadcrumb"></div> <!-- 新增分類導覽容器 -->
+            <div class="breadcrumb"></div>
             <h1>品名</h1>
             <div class="product-img">
                 <img src="" alt="product_image">
                 <button id="prev-btn">上一張</button>
                 <button id="next-btn">下一張</button>
             </div>
-            <!-- <p>顏色</p> 是否有變體 為True時顯示 -->
-            <!-- <p>型號</p> 是否有變體 為True時顯示 -->
-            <p class="price"></p>
+            <p class="price">請選擇規格</p>
+            <div id="variants-container" style="display: none;">
+                <label for="variants">選擇規格:</label>
+                <select id="variants"></select>
+            </div>
             <input type="number" id="quantity" placeholder="輸入數量" min="1" value="1">
             <button id="add-to-cart">加入購物車</button>
             <button>直接購買</button>

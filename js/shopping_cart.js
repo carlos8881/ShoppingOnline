@@ -27,15 +27,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     itemDiv.classList.add('cart-item');
     
                     itemDiv.innerHTML = `
-                        <input type="checkbox" class="select-item" data-product-id="${item.product_id}">
+                        <input type="checkbox" class="select-item" data-product-id="${item.product_id}" data-variant-id="${item.variant_id}">
                         <img src="${item.image_url}" alt="${item.name}">
-                        <p>${item.name}</p>
+                        <p>${item.name} ${item.variant_combination ? `(${item.variant_combination})` : ''}</p>
                         <p>${item.price}</p>
                         <p>${item.quantity}</p>
                         <p>${itemTotal}</p>
-                        <button class="decrease-quantity" data-product-id="${item.product_id}">-</button>
-                        <button class="increase-quantity" data-product-id="${item.product_id}">+</button>
-                        <button class="remove-item" data-product-id="${item.product_id}">刪除</button>
+                        <button class="decrease-quantity" data-product-id="${item.product_id}" data-variant-id="${item.variant_id}">-</button>
+                        <button class="increase-quantity" data-product-id="${item.product_id}" data-variant-id="${item.variant_id}">+</button>
+                        <button class="remove-item" data-product-id="${item.product_id}" data-variant-id="${item.variant_id}">刪除</button>
                     `;
     
                     cartContainer.appendChild(itemDiv);
@@ -50,21 +50,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.querySelectorAll('.decrease-quantity').forEach(button => {
                     button.addEventListener('click', function () {
                         const productId = this.getAttribute('data-product-id');
-                        updateCartItemQuantity(productId, -1);
+                        const variantId = this.getAttribute('data-variant-id');
+                        updateCartItemQuantity(productId, variantId, -1);
                     });
                 });
     
                 document.querySelectorAll('.increase-quantity').forEach(button => {
                     button.addEventListener('click', function () {
                         const productId = this.getAttribute('data-product-id');
-                        updateCartItemQuantity(productId, 1);
+                        const variantId = this.getAttribute('data-variant-id');
+                        updateCartItemQuantity(productId, variantId, 1);
                     });
                 });
     
                 document.querySelectorAll('.remove-item').forEach(button => {
                     button.addEventListener('click', function () {
                         const productId = this.getAttribute('data-product-id');
-                        removeCartItem(productId);
+                        const variantId = this.getAttribute('data-variant-id');
+                        removeCartItem(productId, variantId);
                     });
                 });
     
@@ -87,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => console.error('Error fetching cart items:', error));
     }
 
-    function updateCartItemQuantity(productId, change) {
+    function updateCartItemQuantity(productId, variantId, change) {
         fetch('https://d1khcxe0f8g5xw.cloudfront.net/update-cart-item', {
             method: 'POST',
             headers: {
@@ -96,6 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
             body: JSON.stringify({
                 account: account,
                 product_id: productId,
+                variant_id: variantId,
                 change: change
             })
         })
@@ -105,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // 如果商品數量小於等於0，則刪除該商品
                 if (data.newQuantity <= 0) {
                     // 從 DOM 中移除該商品
-                    const itemDiv = document.querySelector(`.cart-item input[data-product-id="${productId}"]`).closest('.cart-item');
+                    const itemDiv = document.querySelector(`.cart-item input[data-product-id="${productId}"][data-variant-id="${variantId}"]`).closest('.cart-item');
                     itemDiv.remove();
                     // 更新結帳詳情和全選狀態
                     updateCheckoutDetails();
@@ -121,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch(error => console.error('Error updating cart item:', error));
     }
 
-    function removeCartItem(productId, updateCartAfterRemoval = true) {
+    function removeCartItem(productId, variantId, updateCartAfterRemoval = true) {
         fetch('https://d1khcxe0f8g5xw.cloudfront.net/remove-cart-item', {
             method: 'POST',
             headers: {
@@ -129,14 +133,15 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: JSON.stringify({
                 account: account,
-                product_id: productId
+                product_id: productId,
+                variant_id: variantId
             })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
                 // 從 DOM 中移除該商品
-                const itemDiv = document.querySelector(`.cart-item input[data-product-id="${productId}"]`).closest('.cart-item');
+                const itemDiv = document.querySelector(`.cart-item input[data-product-id="${productId}"][data-variant-id="${variantId}"]`).closest('.cart-item');
                 itemDiv.remove();
                 if (updateCartAfterRemoval) {
                     updateCart();
@@ -164,23 +169,24 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.select-item:checked').forEach(checkbox => {
             const itemDiv = checkbox.closest('.cart-item');
             const quantity = parseInt(itemDiv.querySelector('p:nth-child(5)').textContent);
-            const price = parseInt(itemDiv.querySelector('p:nth-child(4)').textContent);
+            const price = parseFloat(itemDiv.querySelector('p:nth-child(4)').textContent); // 確保價格是浮點數
     
             totalQuantity += quantity;
             totalPrice += price * quantity;
         });
     
         totalQuantityElement.textContent = totalQuantity;
-        totalPriceElement.textContent = totalPrice;
-        checkoutPriceElement.textContent = totalPrice;
+        totalPriceElement.textContent = totalPrice.toFixed(2); // 確保顯示兩位小數
+        checkoutPriceElement.textContent = totalPrice.toFixed(2); // 確保顯示兩位小數
     }
 
     document.getElementById('checkout-button').addEventListener('click', function () {
         const selectedItems = Array.from(document.querySelectorAll('.select-item:checked')).map(checkbox => {
             return {
                 product_id: checkbox.getAttribute('data-product-id'),
+                variant_id: checkbox.getAttribute('data-variant-id'),
                 quantity: parseInt(checkbox.closest('.cart-item').querySelector('p:nth-child(5)').textContent),
-                price: parseInt(checkbox.closest('.cart-item').querySelector('p:nth-child(4)').textContent)
+                price: parseFloat(checkbox.closest('.cart-item').querySelector('p:nth-child(4)').textContent) // 確保價格是浮點數
             };
         });
 
