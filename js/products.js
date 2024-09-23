@@ -7,14 +7,14 @@ document.addEventListener('DOMContentLoaded', function () {
     let productData = null; // 新增這一行
 
     if (productId) {
-        fetch(`https://d1khcxe0f8g5xw.cloudfront.net/get-product-info?id=${productId}`)
+        fetch(`https://d1khcxe0f8g5xw.cloudfront.net/products/get-product-info?id=${productId}`)
             .then(response => response.json())
             .then(data => {
                 productData = data; // 在這裡賦值
                 document.querySelector('.product h1').textContent = data.name;
                 if (data.has_variants) {
                     document.querySelector('.product p.price').textContent = '請選擇規格';
-                    fetch(`https://d1khcxe0f8g5xw.cloudfront.net/get-product-variants?id=${productId}`)
+                    fetch(`https://d1khcxe0f8g5xw.cloudfront.net/products/get-product-variants?id=${productId}`)
                         .then(response => response.json())
                         .then(variants => {
                             const variantsContainer = document.getElementById('variants-container');
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.querySelector('.product-description p').innerHTML = data.description.replace(/\n/g, '<br>');
 
                 // Fetch all images (cover and content images)
-                fetch(`https://d1khcxe0f8g5xw.cloudfront.net/get-product-images?id=${productId}`)
+                fetch(`https://d1khcxe0f8g5xw.cloudfront.net/products/get-product-images?id=${productId}`)
                     .then(response => response.json())
                     .then(imageData => {
                         images = imageData;
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     .catch(error => console.error('Error fetching product images:', error));
 
                 // Fetch breadcrumb categories
-                fetch(`https://d1khcxe0f8g5xw.cloudfront.net/get-product-categories?id=${productId}`)
+                fetch(`https://d1khcxe0f8g5xw.cloudfront.net/products/get-product-categories?id=${productId}`)
                     .then(response => response.json())
                     .then(categories => {
                         const breadcrumbContainer = document.querySelector('.breadcrumb');
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // 檢查購物車中是否已經存在相同的商品
-        fetch(`https://d1khcxe0f8g5xw.cloudfront.net/get-cart?account=${account}`)
+        fetch(`https://d1khcxe0f8g5xw.cloudfront.net/cart/get-cart?account=${account}`)
             .then(response => response.json())
             .then(cartItems => {
                 const existingItem = cartItems.find(item => item.product_id == productId && item.variant_id == selectedVariantId);
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     alert('商品已在購物車中');
                 } else {
                     // 如果購物車中沒有相同的商品，則添加到購物車
-                    fetch('https://d1khcxe0f8g5xw.cloudfront.net/add-to-cart', {
+                    fetch('https://d1khcxe0f8g5xw.cloudfront.net/cart/add-to-cart', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'

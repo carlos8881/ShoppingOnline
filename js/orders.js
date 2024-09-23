@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    fetch(`https://d1khcxe0f8g5xw.cloudfront.net/get-orders?account=${account}`)
+    fetch(`https://d1khcxe0f8g5xw.cloudfront.net/orders/get-orders?account=${account}`)
         .then(response => response.json())
         .then(orders => {
             const ordersContainer = document.getElementById('orders-container');
