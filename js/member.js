@@ -67,7 +67,7 @@ function validateAndRegister() {
         const phoneNumber = document.getElementById('new-phone-number').value;
         const email = document.getElementById('new-email').value;
 
-        fetch('https://d1khcxe0f8g5xw.cloudfront.net/register', {
+        fetch(`${window.AppConfig.API_URL}/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -101,14 +101,19 @@ function validateAndLogin() {
     const password = document.getElementById('password').value;
     const remember = document.getElementById('remember').checked;
 
-    fetch('https://d1khcxe0f8g5xw.cloudfront.net/login', {
+    fetch(`${window.AppConfig.API_URL}/auth/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ account, password })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(text => { throw new Error(text) });
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.message === 'Login successful') {
             if (remember) {
@@ -124,6 +129,6 @@ function validateAndLogin() {
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error logging in');
+        alert(error.message);
     });
 };

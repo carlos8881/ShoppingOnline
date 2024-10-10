@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    fetch(`https://d1khcxe0f8g5xw.cloudfront.net/cart/get-cart?account=${account}`)
+    fetch(`${window.AppConfig.API_URL}/cart/get-cart?account=${account}`)
         .then(response => response.json())
         .then(cartItems => {
             const orderItemsContainer = document.getElementById('order-items-container');
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     price: item.price
                 }));
 
-                fetch('https://d1khcxe0f8g5xw.cloudfront.net/orders/checkout', {
+                fetch(`${window.AppConfig.API_URL}/orders/checkout`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

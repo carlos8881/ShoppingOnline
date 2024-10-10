@@ -1,8 +1,10 @@
 const db = require('../models/db');
+const CategoryService = require('../services/categoryService');
+
+const categoryService = new CategoryService(db);
 
 exports.getCategories = (req, res) => {
-    const query = 'SELECT id, name, parent_id FROM categories';
-    db.query(query, (err, results) => {
+    categoryService.getAllCategories((err, results) => {
         if (err) {
             console.error('Error fetching categories:', err);
             res.status(500).send('Error fetching categories');
@@ -26,8 +28,7 @@ exports.getCategories = (req, res) => {
 };
 
 exports.getCategoriesForAddProduct = (req, res) => {
-    const query = 'SELECT id, name, parent_id FROM categories';
-    db.query(query, (err, results) => {
+    categoryService.getAllCategories((err, results) => {
         if (err) {
             console.error('Error fetching categories:', err);
             res.status(500).send('Error fetching categories');

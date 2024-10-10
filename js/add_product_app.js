@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let subCategories = [];
 
     // Fetch categories from the server
-    fetch('https://d1khcxe0f8g5xw.cloudfront.net/categories/get_categories_for_add_product')
+    fetch(`${window.AppConfig.API_URL}/categories/get_categories_for_add_product`)
         .then(response => response.json())
         .then(data => {
             categories = data;
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         console.log('Form Data:', formData); // 調試輸出
 
-        const response = await fetch('https://d1khcxe0f8g5xw.cloudfront.net/products/add-products', {
+        const response = await fetch(`${window.AppConfig.API_URL}/products/add-products`, {
             method: 'POST',
             body: formData
         });

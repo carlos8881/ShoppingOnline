@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-  fetch('https://d1khcxe0f8g5xw.cloudfront.net/categories/get_categories')
+  fetch(`${window.AppConfig.API_URL}/categories/get_categories`)
     .then(response => response.json())
     .then(data => {
         const categoryContainer = document.querySelector('.category');
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
   // Fetch products and populate product cards
-  fetch('https://d1khcxe0f8g5xw.cloudfront.net/products/get-products')
+  fetch(`${window.AppConfig.API_URL}/products/get-products`)
     .then(response => response.json())
     .then(products => {
         const productCardContainer = document.querySelector('.product-card-container');

@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateCart() {
-        fetch(`https://d1khcxe0f8g5xw.cloudfront.net/cart/get-cart?account=${account}`)
+        fetch(`${window.AppConfig.API_URL}/cart/get-cart?account=${account}`)
             .then(response => response.json())
             .then(cartItems => {
                 const cartContainer = document.querySelector('.cart-container');
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateCartItemQuantity(productId, variantId, change) {
-        fetch('https://d1khcxe0f8g5xw.cloudfront.net/cart/update-cart-item', {
+        fetch(`${window.AppConfig.API_URL}/cart/update-cart-item`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function removeCartItem(productId, variantId, updateCartAfterRemoval = true) {
-        fetch('https://d1khcxe0f8g5xw.cloudfront.net/cart/remove-cart-item', {
+        fetch(`${window.AppConfig.API_URL}/cart/remove-cart-item`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

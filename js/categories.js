@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const categoryId = urlParams.get('category_id');
 
     function loadProductsByCategory(categoryId) {
-        fetch(`https://d1khcxe0f8g5xw.cloudfront.net/products/get-products-by-category?category_id=${categoryId}`)
+        fetch(`${window.AppConfig.API_URL}/products/get-products-by-category?category_id=${categoryId}`)
             .then(response => response.json())
             .then(products => {
                 const productCardContainer = document.querySelector('.product-card-container');

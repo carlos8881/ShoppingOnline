@@ -4,7 +4,7 @@ class UserDAO {
     }
 
     getUserByAccount(account, callback) {
-        const query = 'SELECT id FROM users WHERE account = ?';
+        const query = 'SELECT id, password FROM users WHERE account = ?';
         this.db.query(query, [account], callback);
     }
 
