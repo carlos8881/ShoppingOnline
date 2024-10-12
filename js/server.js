@@ -8,6 +8,7 @@ const cartRoutes = require('./routes/cartRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const db = require('./models/db');
 const upload = require('./middlewares/upload');
+const attentionlistRoutes = require('./routes/attentionlistRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,6 +21,7 @@ app.use('/products', productRoutes);
 app.use('/categories', categoryRoutes);
 app.use('/cart', cartRoutes);
 app.use('/orders', orderRoutes);
+app.use('/attentionlist', attentionlistRoutes);
 
 db.connect(err => {
     if (err) {
