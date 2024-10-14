@@ -11,5 +11,6 @@ router.get('/get-product-images', productController.getProductImages);
 router.get('/get-product-variants', productController.getProductVariants);
 router.get('/get-products-by-category', productController.getProductsByCategory);
 router.get('/get-product-categories', productController.getProductCategories);
+router.get('/get-product-reviews', productController.getProductReviews);
 
 module.exports = router;

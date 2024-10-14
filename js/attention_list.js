@@ -31,11 +31,38 @@ document.addEventListener('DOMContentLoaded', function () {
                 productPrice.classList.add('price');
                 productPrice.textContent = `NT$ ${product.base_price}`;
 
+                const removeButton = document.createElement('button');
+                removeButton.textContent = '移除';
+                removeButton.addEventListener('click', () => {
+                    fetch(`${window.AppConfig.API_URL}/attentionlist/remove`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ account, product_id: product.product_id })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(result => {
+                        if (result.success) {
+                            productCard.remove();
+                        } else {
+                            alert('移除失敗');
+                        }
+                    })
+                    .catch(error => console.error('Error removing product:', error));
+                });
+
                 productLink.appendChild(productImage);
                 productLink.appendChild(productName);
 
                 productCard.appendChild(productLink);
                 productCard.appendChild(productPrice);
+                productCard.appendChild(removeButton);
 
                 attentionListContainer.appendChild(productCard);
             });

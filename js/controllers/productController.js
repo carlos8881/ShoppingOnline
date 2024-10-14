@@ -98,3 +98,15 @@ exports.getProductCategories = (req, res) => {
         res.json(results);
     });
 };
+
+exports.getProductReviews = (req, res) => {
+    const productId = req.query.id;
+    productService.getProductReviews(productId, (err, reviews) => {
+        if (err) {
+            console.error('Error fetching product reviews:', err);
+            res.status(500).send('Error fetching product reviews');
+            return;
+        }
+        res.json(reviews);
+    });
+};

@@ -86,6 +86,10 @@ class ProductService {
         `;
         this.productDAO.db.query(query, [productId], callback);
     }
+
+    getProductReviews(productId, callback) {
+        this.productDAO.getProductReviews(productId, callback);
+    }
 }
 
 module.exports = ProductService;

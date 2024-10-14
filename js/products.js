@@ -4,13 +4,13 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentImageIndex = 0;
     let images = [];
     let selectedVariantId = null;
-    let productData = null; // 新增這一行
+    let productData = null;
 
     if (productId) {
         fetch(`${window.AppConfig.API_URL}/products/get-product-info?id=${productId}`)
             .then(response => response.json())
             .then(data => {
-                productData = data; // 在這裡賦值
+                productData = data;
                 document.querySelector('.product h1').textContent = data.name;
                 if (data.has_variants) {
                     document.querySelector('.product p.price').textContent = '請選擇規格';
@@ -69,6 +69,47 @@ document.addEventListener('DOMContentLoaded', function () {
                         });
                     })
                     .catch(error => console.error('Error fetching breadcrumb categories:', error));
+
+                // Fetch product reviews
+                fetch(`${window.AppConfig.API_URL}/products/get-product-reviews?id=${productId}`)
+                    .then(response => response.json())
+                    .then(reviews => {
+                        const reviewsContainer = document.getElementById('reviews-container');
+                        const reviewButtons = document.querySelectorAll('.review-buttons button');
+
+                        function displayReviews(rating) {
+                            reviewsContainer.innerHTML = '';
+                            const filteredReviews = reviews.filter(review => review.rating == rating);
+                            filteredReviews.forEach(review => {
+                                const reviewDiv = document.createElement('div');
+                                reviewDiv.classList.add('review');
+
+                                const maskedBuyerName = review.buyer_name[0] + '****' + review.buyer_name.slice(-1);
+
+                                reviewDiv.innerHTML = `
+                                    <p>評分: ${review.rating} / 5</p>
+                                    <p>買家: ${maskedBuyerName}</p>
+                                    <p>日期: ${new Date(review.date).toLocaleDateString()}</p>
+                                    ${review.variant ? `<p>規格: ${review.variant}</p>` : ''}
+                                    ${review.images ? review.images.map(image => `<img src="${image}" alt="review image">`).join('') : ''}
+                                    <p>${review.content}</p>
+                                `;
+
+                                reviewsContainer.appendChild(reviewDiv);
+                            });
+                        }
+
+                        reviewButtons.forEach(button => {
+                            button.addEventListener('click', function () {
+                                const rating = this.getAttribute('data-rating');
+                                displayReviews(rating);
+                            });
+                        });
+
+                        // 預設顯示5分評價
+                        displayReviews(5);
+                    })
+                    .catch(error => console.error('Error fetching product reviews:', error));
             })
             .catch(error => console.error('Error fetching product data:', error));
     }
@@ -106,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        if (selectedVariantId === null && productData.has_variants) { // 修改這一行
+        if (selectedVariantId === null && productData.has_variants) {
             alert('請選擇規格');
             return;
         }

@@ -6,8 +6,8 @@ class OrderDAO {
     createOrder(order) {
         const { userId, totalPrice, deliveryPrice, checkoutPrice, deliveryMethod, orderNumber } = order;
         const query = `
-            INSERT INTO orders (user_id, total_price, delivery_price, checkout_price, delivery_method, created_at, order_number)
-            VALUES (?, ?, ?, ?, ?, NOW(), ?)
+            INSERT INTO orders (user_id, total_price, delivery_price, checkout_price, delivery_method, created_at, order_number, shipping_status)
+            VALUES (?, ?, ?, ?, ?, NOW(), ?, 'Pending')
         `;
         return new Promise((resolve, reject) => {
             this.db.query(query, [userId, totalPrice, deliveryPrice, checkoutPrice, deliveryMethod, orderNumber], (err, result) => {
@@ -37,7 +37,7 @@ class OrderDAO {
 
     getOrdersByUserId(userId) {
         const query = `
-            SELECT o.id, o.total_price, o.delivery_price, o.checkout_price, o.delivery_method, o.created_at, o.order_number,
+            SELECT o.id, o.total_price, o.delivery_price, o.checkout_price, o.delivery_method, o.created_at, o.order_number, o.shipping_status,
                    oi.product_id, oi.variant_id, oi.quantity, oi.price, p.name, pi.image_url, v.variant_combination
             FROM orders o
             JOIN order_items oi ON o.id = oi.order_id
@@ -63,6 +63,7 @@ class OrderDAO {
                             delivery_method: row.delivery_method,
                             created_at: row.created_at,
                             order_number: row.order_number,
+                            shipping_status: row.shipping_status,
                             items: []
                         };
                     }
@@ -77,6 +78,22 @@ class OrderDAO {
                     });
                 });
                 resolve(Object.values(orders));
+            });
+        });
+    }
+
+    updateOrderStatus(orderId, status) {
+        const query = `
+            UPDATE orders
+            SET shipping_status = ?
+            WHERE id = ?
+        `;
+        return new Promise((resolve, reject) => {
+            this.db.query(query, [status, orderId], (err, result) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(result);
             });
         });
     }

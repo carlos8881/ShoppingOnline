@@ -22,3 +22,14 @@ exports.getOrders = async (req, res) => {
         res.status(500).send('Error fetching orders');
     }
 };
+
+exports.updateOrderStatus = async (req, res) => {
+    try {
+        const { orderId, status } = req.body;
+        const result = await orderService.updateOrderStatus(orderId, status);
+        res.json(result);
+    } catch (error) {
+        console.error('Error updating order status:', error);
+        res.status(500).send('Error updating order status');
+    }
+};

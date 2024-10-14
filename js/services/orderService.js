@@ -1,4 +1,4 @@
-const OrderDAO = require('../models/OrderDAO');
+const OrderDAO = require('../models/orderDAO');
 const UserDAO = require('../models/userDAO');
 const db = require('../models/db');
 const crypto = require('crypto');
@@ -55,6 +55,11 @@ class OrderService {
         const userId = user.id;
         const orders = await this.orderDAO.getOrdersByUserId(userId);
         return orders;
+    }
+
+    async updateOrderStatus(orderId, status) {
+        await this.orderDAO.updateOrderStatus(orderId, status);
+        return { success: true };
     }
 }
 
