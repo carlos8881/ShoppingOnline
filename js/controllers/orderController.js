@@ -23,6 +23,17 @@ exports.getOrders = async (req, res) => {
     }
 };
 
+exports.getOrderDetail = async (req, res) => {
+    try {
+        const orderId = req.query.orderId;
+        const order = await orderService.getOrderDetail(orderId);
+        res.json(order);
+    } catch (error) {
+        console.error('Error fetching order detail:', error);
+        res.status(500).send('Error fetching order detail');
+    }
+};
+
 exports.updateOrderStatus = async (req, res) => {
     try {
         const { orderId, status } = req.body;

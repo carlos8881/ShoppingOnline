@@ -8,7 +8,7 @@ class ReviewService {
         this.orderDAO = new OrderDAO(db);
     }
 
-    async addReview(orderId, content, rating) {
+    async addReview(orderId, userId, productId, content, rating) {
         const order = await this.orderDAO.getOrderById(orderId);
         if (!order) {
             throw new Error('Order not found');
@@ -16,8 +16,8 @@ class ReviewService {
 
         const review = {
             orderId,
-            userId: order.user_id,
-            productId: order.product_id,
+            userId,
+            productId,
             content,
             rating
         };

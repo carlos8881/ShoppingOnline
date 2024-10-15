@@ -57,6 +57,11 @@ class OrderService {
         return orders;
     }
 
+    async getOrderDetail(orderId) {
+        const order = await this.orderDAO.getOrderById(orderId);
+        return order;
+    }
+
     async updateOrderStatus(orderId, status) {
         await this.orderDAO.updateOrderStatus(orderId, status);
         return { success: true };

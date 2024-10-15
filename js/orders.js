@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     <p>總價: ${order.checkout_price}</p>
                     <p>運送方式: ${order.delivery_method === 'store-pickup' ? '超商取貨' : '宅配'}</p>
                 `;
+                orderHeader.addEventListener('click', () => {
+                    window.location.href = `order_detail.html?orderId=${order.id}`;
+                });
                 orderDiv.appendChild(orderHeader);
 
                 const orderItemsContainer = document.createElement('div');
