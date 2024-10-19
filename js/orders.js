@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
                 const updateButton = document.createElement('button');
-                updateButton.textContent = '更新狀態';
+                updateButton.textContent = '更新狀態(測試用)';
                 updateButton.addEventListener('click', () => {
                     const newStatus = statusSelect.value;
                     fetch(`${window.AppConfig.API_URL}/orders/update-status`, {

@@ -1,29 +1,17 @@
 const ReviewDAO = require('../models/reviewDAO');
-const OrderDAO = require('../models/orderDAO');
 const db = require('../models/db');
 
 class ReviewService {
     constructor() {
         this.reviewDAO = new ReviewDAO(db);
-        this.orderDAO = new OrderDAO(db);
     }
 
-    async addReview(orderId, userId, productId, content, rating) {
-        const order = await this.orderDAO.getOrderById(orderId);
-        if (!order) {
-            throw new Error('Order not found');
-        }
+    async addProductReview(orderId, productId, userId, reviewText, rating) {
+        return this.reviewDAO.addProductReview(orderId, productId, userId, reviewText, rating);
+    }
 
-        const review = {
-            orderId,
-            userId,
-            productId,
-            content,
-            rating
-        };
-
-        await this.reviewDAO.createReview(review);
-        return { success: true };
+    async getProductReview(orderId, productId) {
+        return this.reviewDAO.getProductReview(orderId, productId);
     }
 }
 

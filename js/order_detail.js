@@ -12,102 +12,123 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(order => {
             const orderDetailContainer = document.getElementById('order-detail-container');
+            orderDetailContainer.innerHTML = ''; // 清空容器
 
-            const orderHeader = document.createElement('div');
-            orderHeader.classList.add('order-header');
-            orderHeader.innerHTML = `
-                <h3>訂單編號: ${order.order_number}</h3>
-                <p>成立日期: ${new Date(order.created_at).toLocaleString()}</p>
-                <p>總價: ${order.checkout_price}</p>
-                <p>運送方式: ${order.delivery_method === 'store-pickup' ? '超商取貨' : '宅配'}</p>
-            `;
-            orderDetailContainer.appendChild(orderHeader);
-
-            const orderItemsContainer = document.createElement('div');
-            orderItemsContainer.classList.add('order-items-container');
-
-            order.items.forEach(item => {
-                const itemDiv = document.createElement('div');
-                itemDiv.classList.add('order-item');
-
-                itemDiv.innerHTML = `
-                    <img src="${item.image_url}" alt="${item.name}">
-                    <p>${item.name} ${item.variant_combination ? `(${item.variant_combination})` : ''}</p>
-                    <p>${item.price}</p>
-                    <p>${item.quantity}</p>
-                    <p>${item.price * item.quantity}</p>
-                `;
-
-                orderItemsContainer.appendChild(itemDiv);
-            });
-
-            orderDetailContainer.appendChild(orderItemsContainer);
-
-            // 顯示評論區塊
-            if (order.reviews && order.reviews.length > 0) {
-                const reviewsContainer = document.createElement('div');
-                reviewsContainer.classList.add('reviews-container');
-                reviewsContainer.innerHTML = '<h4>評論</h4>';
-
-                order.reviews.forEach(review => {
-                    const reviewDiv = document.createElement('div');
-                    reviewDiv.classList.add('review');
-                    reviewDiv.innerHTML = `
-                        <p>評分: ${review.rating}</p>
-                        <p>內容: ${review.content}</p>
-                        <p>日期: ${new Date(review.date).toLocaleString()}</p>
-                    `;
-                    reviewsContainer.appendChild(reviewDiv);
-                });
-
-                orderDetailContainer.appendChild(reviewsContainer);
-            }
-
-            // 顯示評論填寫區塊
-            if (order.shipping_status === 'Delivered' && !order.reviewed) {
-                const reviewForm = document.createElement('form');
-                reviewForm.classList.add('review-form');
-                reviewForm.innerHTML = `
-                    <h4>填寫評論</h4>
-                    <textarea name="content" placeholder="請輸入評論內容"></textarea>
-                    <input type="number" name="rating" min="1" max="5" placeholder="評分 (1-5)">
-                    <button type="submit">送出評論</button>
-                `;
-                reviewForm.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    const content = reviewForm.querySelector('textarea[name="content"]').value;
-                    const rating = reviewForm.querySelector('input[name="rating"]').value;
-                    fetch(`${window.AppConfig.API_URL}/reviews/add`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            orderId: order.id,
-                            userId: order.user_id, // 确保 userId 被正确传递
-                            productId: order.items[0].product_id, // 假设评论的是第一个商品
-                            content, // 确保 content 被正确传递
-                            rating
-                        })
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(result => {
-                        if (result.success) {
-                            alert('評論提交成功');
-                            location.reload(); // 刷新頁面以更新評論狀態
-                        } else {
-                            alert('評論提交失敗');
-                        }
-                    })
-                    .catch(error => console.error('Error submitting review:', error));
-                });
-                orderDetailContainer.appendChild(reviewForm);
-            }
+            displayOrderDetails(order, orderDetailContainer);
+            displayOrderItems(order.items, orderDetailContainer, orderId, order.user_id, order.shipping_status); // 傳遞 order.shipping_status
         })
         .catch(error => console.error('Error fetching order detail:', error));
 });
+
+function displayOrderDetails(order, container) {
+    const orderHeader = document.createElement('div');
+    orderHeader.classList.add('order-header');
+    orderHeader.innerHTML = `
+        <h3>訂單編號: ${order.order_number}</h3>
+        <p>成立日期: ${new Date(order.created_at).toLocaleString()}</p>
+        <p>總價: ${order.checkout_price}</p>
+        <p>運送方式: ${order.delivery_method === 'store-pickup' ? '超商取貨' : '宅配'}</p>
+    `;
+    container.appendChild(orderHeader);
+}
+
+function displayOrderItems(items, container, orderId, userId, orderStatus) { // 添加 orderStatus 參數
+    const orderItemsContainer = document.createElement('div');
+    orderItemsContainer.classList.add('order-items-container');
+
+    items.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.classList.add('order-item');
+
+        itemDiv.innerHTML = `
+            <img src="${item.image_url}" alt="${item.name}">
+            <p>${item.name} ${item.variant_combination ? `(${item.variant_combination})` : ''}</p>
+            <p>${item.price}</p>
+            <p>${item.quantity}</p>
+            <p>${item.price * item.quantity}</p>
+            <div id="review-container-${item.product_id}"></div>
+        `;
+
+        orderItemsContainer.appendChild(itemDiv);
+
+        fetch(`${window.AppConfig.API_URL}/reviews/product-reviews/${orderId}/${item.product_id}`)
+        .then(response => {
+            if (response.status === 404) {
+                return null; // 沒有找到評論
+            }
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text(); // 使用 text() 方法而不是 json()
+        })
+        .then(text => {
+            if (!text) {
+                return null; // 空響應
+            }
+            return JSON.parse(text); // 手動解析 JSON
+        })
+        .then(review => {
+            if (review && review.review_text && review.rating) {
+                displayProductReview(review, item.product_id);
+            } else if (orderStatus === 'Delivered') { // 檢查訂單狀態
+                displayReviewInput(item.product_id, orderId, userId);
+            }
+        })
+        .catch(error => console.error('Error fetching product review:', error));
+    });
+
+    container.appendChild(orderItemsContainer);
+}
+
+function displayReviewInput(productId, orderId, userId) { // 添加 userId 參數
+    const reviewContainer = document.getElementById(`review-container-${productId}`);
+    reviewContainer.innerHTML = `
+        <textarea id="review-text-${productId}" placeholder="輸入評論"></textarea>
+        <input type="number" id="review-rating-${productId}" min="1" max="5" placeholder="評分 (1-5)">
+        <button onclick="submitReview(${orderId}, ${productId}, ${userId})">提交評論</button>
+    `;
+}
+
+function displayProductReview(review, productId) {
+    const reviewContainer = document.getElementById(`review-container-${productId}`);
+    if (review && review.review_text && review.rating) {
+        reviewContainer.innerHTML = `
+            <p>評論: ${review.review_text}</p>
+            <p>評分: ${review.rating}</p>
+        `;
+    } else {
+        reviewContainer.innerHTML = `
+        `;
+    }
+}
+
+function submitReview(orderId, productId, userId) {
+    const reviewText = document.getElementById(`review-text-${productId}`).value;
+    const reviewRating = document.getElementById(`review-rating-${productId}`).value;
+
+    const reviewData = {
+        orderId,
+        productId,
+        userId,
+        reviewText,
+        rating: reviewRating
+    };
+
+    // 在主控台顯示將要送出的資料
+    console.log('Submitting review data:', reviewData);
+
+    fetch(`${window.AppConfig.API_URL}/reviews/add-product-review`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(reviewData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert('評論提交成功');
+        // 更新頁面上的評論內容
+        displayProductReview(reviewData, productId);
+    })
+    .catch(error => console.error('Error submitting review:', error));
+}

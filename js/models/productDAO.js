@@ -34,12 +34,11 @@ class ProductDAO {
 
     getProductReviews(productId, callback) {
         const query = `
-            SELECT r.rating, r.content, r.date, r.images, u.account AS buyer_name, v.variant_combination AS variant
-            FROM reviews r
+            SELECT r.rating, r.review_text, r.created_at, u.account AS buyer_name
+            FROM product_reviews r
             JOIN users u ON r.user_id = u.id
-            LEFT JOIN product_variants v ON r.variant_id = v.id
             WHERE r.product_id = ?
-            ORDER BY r.date DESC
+            ORDER BY r.created_at DESC
         `;
         this.db.query(query, [productId], callback);
     }

@@ -85,14 +85,12 @@ class OrderDAO {
     getOrderById(orderId) {
         const query = `
             SELECT o.id, o.user_id, o.total_price, o.delivery_price, o.checkout_price, o.delivery_method, o.created_at, o.order_number, o.shipping_status,
-                   oi.product_id, oi.variant_id, oi.quantity, oi.price, p.name, pi.image_url, v.variant_combination,
-                   r.rating, r.content, r.date
+                   oi.product_id, oi.variant_id, oi.quantity, oi.price, p.name, pi.image_url, v.variant_combination
             FROM orders o
             JOIN order_items oi ON o.id = oi.order_id
             JOIN products p ON oi.product_id = p.id
             LEFT JOIN product_variants v ON oi.variant_id = v.id
             JOIN product_images pi ON p.id = pi.product_id AND pi.is_cover = 1
-            LEFT JOIN reviews r ON o.id = r.order_id
             WHERE o.id = ?
         `;
         return new Promise((resolve, reject) => {
@@ -113,8 +111,7 @@ class OrderDAO {
                     created_at: results[0].created_at,
                     order_number: results[0].order_number,
                     shipping_status: results[0].shipping_status,
-                    items: [],
-                    reviews: []
+                    items: []
                 };
                 results.forEach(row => {
                     order.items.push({
@@ -126,13 +123,6 @@ class OrderDAO {
                         image_url: row.image_url,
                         variant_combination: row.variant_combination
                     });
-                    if (row.rating !== null) {
-                        order.reviews.push({
-                            rating: row.rating,
-                            content: row.content,
-                            date: row.date
-                        });
-                    }
                 });
                 resolve(order);
             });

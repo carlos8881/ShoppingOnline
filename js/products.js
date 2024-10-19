@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         function displayReviews(rating) {
                             reviewsContainer.innerHTML = '';
-                            const filteredReviews = reviews.filter(review => review.rating == rating);
+                            const filteredReviews = rating === 'all' ? reviews : reviews.filter(review => review.rating == rating);
                             filteredReviews.forEach(review => {
                                 const reviewDiv = document.createElement('div');
                                 reviewDiv.classList.add('review');
@@ -89,10 +89,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                 reviewDiv.innerHTML = `
                                     <p>評分: ${review.rating} / 5</p>
                                     <p>買家: ${maskedBuyerName}</p>
-                                    <p>日期: ${new Date(review.date).toLocaleDateString()}</p>
-                                    ${review.variant ? `<p>規格: ${review.variant}</p>` : ''}
-                                    ${review.images ? review.images.map(image => `<img src="${image}" alt="review image">`).join('') : ''}
-                                    <p>${review.content}</p>
+                                    <p>日期: ${new Date(review.created_at).toLocaleDateString()}</p>
+                                    <p>${review.review_text}</p>
                                 `;
 
                                 reviewsContainer.appendChild(reviewDiv);
@@ -106,8 +104,17 @@ document.addEventListener('DOMContentLoaded', function () {
                             });
                         });
 
-                        // 預設顯示5分評價
-                        displayReviews(5);
+                        // 添加 "全部" 的按鈕
+                        const showAllButton = document.createElement('button');
+                        showAllButton.textContent = '全部';
+                        showAllButton.setAttribute('data-rating', 'all');
+                        showAllButton.addEventListener('click', function () {
+                            displayReviews('all');
+                        });
+                        document.querySelector('.review-buttons').appendChild(showAllButton);
+
+                        // 預設顯示全部評價
+                        displayReviews('all');
                     })
                     .catch(error => console.error('Error fetching product reviews:', error));
             })
