@@ -5,6 +5,18 @@
     box-sizing: border-box; /* 設置 box-sizing 為 border-box，確保內邊距和邊框包含在元素的總寬度和高度內 */
 }
 
+li {
+    list-style-type: none; /* 移除所有 li 元素的默认圆点符号 */
+}
+
+.topmenu .left li {
+    margin-right: 6px; /* 設置左側選單項目之間的間距 */
+}
+
+.topmenu .right li a {
+    margin-left: 6px; /* 設置右側選單項目之間的間距 */
+}
+
 .product-card img {
     width: 180px;
     height: 180px;
@@ -37,7 +49,6 @@ div.product a img {
 }
 
 .topmenu {
-    /* margin: 0 auto; */
     display: flex;
     justify-content: space-between;
 }
@@ -56,4 +67,74 @@ div.product a img {
 
 .headsearch {
     display: flex;
+}
+
+.headcontent > .category {
+    position: relative; /* 確保子元素的絕對定位是相對於這個容器 */
+    display: flex;
+}
+
+.headcontent > .category > .category-container {
+    padding-left: 10px;
+}
+
+
+.subcategory-list {
+    position: absolute; /* 設置為絕對定位 */
+    background-color: rgb(235, 184, 149); /* 設置背景色，確保可見性 */
+    width: 99vw; /* 設置子分類表的寬度為視窗寬度 */
+    height: 200px; /* 設置子分類表的高度 */
+    padding-left: 370px;
+    padding-right: 370px;
+    top: 100%; /* 確保子分類區塊緊貼父分類區塊 */
+    left: -370px; /* 子分類選項從左側算370px遠的地方開始排列 */
+    display: flex; /* 使用 flex 布局 */
+    justify-content: flex-start; /* 子分類選項從左側開始排列 */
+}
+
+.subcategory-list a {
+    text-align: left; /* 确保子分类列表中的链接文本靠左对齐 */
+    margin-left: 10px;
+}
+
+.promotional-billboard {
+    display: flex;
+    justify-content: center;
+    margin-left: 360px;
+    margin-right: 360px;
+}
+
+.login-container {
+    margin-left: 360px;
+    margin-right: 360px;
+}
+
+.all-products-container {
+    margin-left: 360px;
+    margin-right: 360px;
+}
+
+.product-card-container {
+    display: flex;
+    flex-wrap: wrap; /* 确保产品卡片在容器内换行 */
+    justify-content: space-between; /* 水平平均保留间隙 */
+    gap: 10px; /* 添加卡片之间的间距 */
+}
+
+.product-card {
+    max-width: 180px; /* 设置产品卡片的最大宽度 */
+    width: 100%; /* 确保产品卡片占据可用宽度 */
+    box-sizing: border-box; /* 包括内边距和边框在内的总宽度 */
+}
+
+.product-container {
+    margin-left: 360px;
+    margin-right: 360px;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: center;
+    margin-left: 360px;
+    margin-right: 360px;
 }
