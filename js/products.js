@@ -7,6 +7,26 @@ document.addEventListener('DOMContentLoaded', function () {
     let productData = null;
 
     if (productId) {
+        // 獲取用戶 account
+        const account = localStorage.getItem('account');
+        if (account) {
+            // 發送瀏覽紀錄到後端
+            fetch(`${window.AppConfig.API_URL}/browsing-history/add`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ account, productId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    console.error('Error adding browsing history:', data.error);
+                }
+            })
+            .catch(error => console.error('Error adding browsing history:', error));
+        }
+
         fetch(`${window.AppConfig.API_URL}/products/get-product-info?id=${productId}`)
             .then(response => response.json())
             .then(data => {
