@@ -25,10 +25,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 itemDiv.innerHTML = `
                     <img src="${item.image_url}" alt="${item.name}" class="order-item-image">
-                    <p>${item.name} ${item.variant_combination ? `(${item.variant_combination})` : ''}</p>
-                    <p>${item.price}</p>
-                    <p>${item.quantity}</p>
-                    <p>${itemTotal}</p>
+                    <p class="product_name">${item.name} ${item.variant_combination ? `(${item.variant_combination})` : ''}</p>
+                    <div class="amount_area">
+                        <p>單價${item.price}元</p>
+                        <p>${item.quantity}件</p>
+                        <p>總價${itemTotal}元</p>
+                    </div>
                 `;
 
                 orderItemsContainer.appendChild(itemDiv);

@@ -41,11 +41,13 @@ function displayOrderItems(items, container, orderId, userId, orderStatus) { // 
         itemDiv.classList.add('order-item');
 
         itemDiv.innerHTML = `
-            <img src="${item.image_url}" alt="${item.name}">
-            <p>${item.name} ${item.variant_combination ? `(${item.variant_combination})` : ''}</p>
-            <p>${item.price}</p>
-            <p>${item.quantity}</p>
-            <p>${item.price * item.quantity}</p>
+            <img class="product_img" src="${item.image_url}" alt="${item.name}">
+            <p class="product_name">${item.name} ${item.variant_combination ? `(${item.variant_combination})` : ''}</p>
+            <div class="amount-area">
+                <p>單價${item.price}元</p>
+                <p>${item.quantity}件</p>
+                <p>總價${item.price * item.quantity}元</p>
+            </div>
             <div id="review-container-${item.product_id}"></div>
         `;
 

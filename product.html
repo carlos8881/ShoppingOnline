@@ -41,24 +41,28 @@
         </div>
     </header>
     <div class="product-container">
+        <div class="breadcrumb"></div>
         <div class="product">
-            <div class="breadcrumb"></div>
-            <h1>品名</h1>
             <div class="product-img">
                 <img src="" alt="product_image">
                 <button id="prev-btn">上一張</button>
                 <button id="next-btn">下一張</button>
             </div>
-            <p class="price">請選擇規格</p>
-            <div id="variants-container" style="display: none;">
-                <label for="variants">選擇規格:</label>
-                <select id="variants"></select>
+            <div class="maininfo">
+                <h1>品名</h1>
+                <p class="price">請選擇規格</p>
+                <div id="variants-container" style="display: none;">
+                    <label for="variants">選擇規格:</label>
+                    <select id="variants"></select>
+                </div>
+                <input type="number" id="quantity" placeholder="輸入數量" min="1" value="1">
+                <div class="buy-and-cart-botton">
+                    <button id="add-to-cart">加入購物車</button>
+                    <button>直接購買</button>
+                </div>
+                <p class="payment-method">付款方式</p>
+                <p class="send-info">配送</p>
             </div>
-            <input type="number" id="quantity" placeholder="輸入數量" min="1" value="1">
-            <button id="add-to-cart">加入購物車</button>
-            <button>直接購買</button>
-            <p>付款方式</p>
-            <p>配送</p>
         </div>
         <div class="product-info">
             <div class="product-description">
@@ -80,9 +84,6 @@
     </div>
     <footer class="footer-container">
         <div class="footer">
-            <div class="footer-logo">
-                <img src="images/logo.png" alt="logo">
-            </div>
             <div class="footer-text">
                 <p>公司地址：台北市信義區信義路五段7749號</p>
                 <p>客服專線：0800-123-456</p>

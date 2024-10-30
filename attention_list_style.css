@@ -1,0 +1,60 @@
+* {
+    font-family: "Noto Sans TC", sans-serif; /* 設定所有元素的字體為 Noto Sans TC */
+    padding: 0; /* 移除所有元素的內邊距 */
+    margin: 0; /* 移除所有元素的外邊距 */
+    box-sizing: border-box; /* 設置 box-sizing 為 border-box，確保內邊距和邊框包含在元素的總寬度和高度內 */
+}
+
+body {
+    margin-left: 360px;
+    margin-right: 360px;
+}
+
+.headcontent {
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.headcontent .logo {
+    display: flex;
+    justify-content: center; /* 水平居中对齐 */
+}
+
+.attention-list {
+    display: flex;
+    flex-wrap: wrap; /* 确保产品卡片在容器内换行 */
+    gap: 23.8px; /* 添加卡片之间的间距 */
+}
+
+.product-card {
+    max-width: 180px; /* 设置产品卡片的最大宽度 */
+    height: 300px;
+    width: 100%; /* 确保产品卡片占据可用宽度 */
+    box-sizing: border-box; /* 包括内边距和边框在内的总宽度 */
+    border: 1px solid rgb(230, 230, 230); /* 添加边框 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+    display: flex;
+    flex-direction: column; /* 使用 flex 布局 */
+    justify-content: space-between; /* 确保 .price 靠在容器的最底部 */
+}
+
+.product-card img {
+    width: 178px;
+    height: 178px;
+}
+
+.product-card .name {
+    font-size: 14px;
+    height: 40px;
+    margin: 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 显示最多两行 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis; /* 多余的文字替换为 ... */
+}
+
+
+.product-card .price {
+    margin: 6px;
+}

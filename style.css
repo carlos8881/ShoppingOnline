@@ -9,6 +9,33 @@ li {
     list-style-type: none; /* 移除所有 li 元素的默认圆点符号 */
 }
 
+a {
+    color: black;
+    text-decoration: none;
+}
+
+.headcontent {
+    text-align: center; /* 確保父容器內的元素居中 */
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 360px;
+    padding-right: 360px;
+    position: fixed; /* 固定在頁面頂部 */
+    top: 0; /* 距離頁面頂部 0px */
+    width: 100%; /* 視窗寬度 */
+    z-index: 1000; /* 確保在其他內容之上 */
+    background-color: rgb(230, 230, 230); /* 加背景色避免內容滾動時被覆蓋 */
+}
+
+a:visited {
+    color: inherit;
+    text-decoration: none;
+}
+
+.headcontent a:hover {
+    color: rgb(0, 17, 255);
+}
+
 .topmenu .left li {
     margin-right: 6px; /* 設置左側選單項目之間的間距 */
 }
@@ -17,9 +44,47 @@ li {
     margin-left: 6px; /* 設置右側選單項目之間的間距 */
 }
 
+.promotional-billboard .right img {
+    width: 382px;
+    margin-left: 6px;
+    margin-top: 2px;
+}
+
+.scroll {
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%; /* 确保滚动容器的宽度 */
+    position: relative;
+}
+
+.scrollcontent {
+    display: flex; /* 使用 flex 布局 */
+    transition: transform 0.5s ease;
+}
+
+.scrollcontent img {
+    width: 100%; /* 确保图片占据整个容器宽度 */
+    flex-shrink: 0; /* 确保图片不会缩小 */
+}
+
 .product-card img {
-    width: 180px;
-    height: 180px;
+    width: 178px;
+    height: 178px;
+}
+
+.product-card .name {
+    font-size: 14px;
+    margin: 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 显示最多两行 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis; /* 多余的文字替换为 ... */
+}
+
+
+.product-card .price {
+    margin: 6px;
 }
 
 .product-img img {
@@ -42,15 +107,11 @@ div.product a img {
     height: 180px;
 }
 
-.headcontent {
-    text-align: center; /* 確保父容器內的元素居中 */
-    margin-left: 360px;
-    margin-right: 360px;
-}
-
 .topmenu {
     display: flex;
     justify-content: space-between;
+    margin-top: 4px;
+    margin-bottom: 4px;
 }
 
 .topmenu .left {
@@ -62,27 +123,45 @@ div.product a img {
 }
 
 .headsearch-container {
-    /* margin: 0 auto; */
+    margin-top: 4px;
+    margin-bottom: 4px;
 }
 
 .headsearch {
     display: flex;
+    align-items: center;
+}
+
+.headsearch input {
+    width: 500px;
+    height: 36px;
+    margin-left: 16px;
+}
+
+.headsearch button {
+    height: 36px;
+    background-color: rgb(221, 28, 28);
+    color: white;
+    border: none;
+    padding: 0 16px;
+    cursor: pointer;
 }
 
 .headcontent > .category {
     position: relative; /* 確保子元素的絕對定位是相對於這個容器 */
     display: flex;
+    margin-top: 4px;
+    margin-bottom: 4px;
 }
 
 .headcontent > .category > .category-container {
     padding-left: 10px;
 }
 
-
 .subcategory-list {
     position: absolute; /* 設置為絕對定位 */
-    background-color: rgb(235, 184, 149); /* 設置背景色，確保可見性 */
-    width: 99vw; /* 設置子分類表的寬度為視窗寬度 */
+    background-color: rgb(255, 255, 255); /* 設置背景色，確保可見性 */
+    width: 99.6vw; /* 設置子分類表的寬度為視窗寬度 */
     height: 200px; /* 設置子分類表的高度 */
     padding-left: 370px;
     padding-right: 370px;
@@ -90,16 +169,23 @@ div.product a img {
     left: -370px; /* 子分類選項從左側算370px遠的地方開始排列 */
     display: flex; /* 使用 flex 布局 */
     justify-content: flex-start; /* 子分類選項從左側開始排列 */
+    z-index: 10; /* 设置较高的 z-index */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影 */
 }
 
 .subcategory-list a {
     text-align: left; /* 确保子分类列表中的链接文本靠左对齐 */
-    margin-left: 10px;
+    margin-left: 20px;
+}
+
+.product-container {
+    margin-top: 134px;
 }
 
 .promotional-billboard {
     display: flex;
     justify-content: center;
+    margin-top: 134px;
     margin-left: 360px;
     margin-right: 360px;
 }
@@ -114,17 +200,28 @@ div.product a img {
     margin-right: 360px;
 }
 
+.all-products-container-categories-page {
+    margin-top: 134px;
+    margin-left: 360px;
+    margin-right: 360px;
+}
+
 .product-card-container {
     display: flex;
     flex-wrap: wrap; /* 确保产品卡片在容器内换行 */
-    justify-content: space-between; /* 水平平均保留间隙 */
-    gap: 10px; /* 添加卡片之间的间距 */
+    gap: 20.6px; /* 添加卡片之间的间距 */
 }
 
 .product-card {
     max-width: 180px; /* 设置产品卡片的最大宽度 */
+    height: 262px;
     width: 100%; /* 确保产品卡片占据可用宽度 */
     box-sizing: border-box; /* 包括内边距和边框在内的总宽度 */
+    border: 1px solid rgb(230, 230, 230); /* 添加边框 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 添加阴影 */
+    display: flex;
+    flex-direction: column; /* 使用 flex 布局 */
+    justify-content: space-between; /* 确保 .price 靠在容器的最底部 */
 }
 
 .product-container {
@@ -132,9 +229,244 @@ div.product a img {
     margin-right: 360px;
 }
 
+.product-container .breadcrumb {
+    margin-left: 24px;
+    padding-top: 8px;
+}
+
+.product {
+    display: flex;
+}
+
+.product .product-img {
+    text-align: center; /* 确保按钮居中对齐 */
+}
+
+.product .product-img img {
+    display: block;
+    margin: 24px;
+}
+
+.product .product-img button {
+}
+
+.product .maininfo {
+    margin: 24px;
+    display: flex;
+    flex-direction: column; /* 使用 flex 布局 */
+    justify-content: space-between; /* 确保子元素在容器内均匀分布 */
+    height: 495px; /* 确保容器占据可用高度 */
+
+}
+
+.product .maininfo h1 {
+    font-weight: normal;
+    font-size: 24px;
+    margin-top: 6px;
+    margin-bottom: 16px;
+}
+
+.product .maininfo .price {
+    font-size: 20px;
+    color: rgb(231, 22, 22);
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.product .maininfo input#quantity {
+    width: 60px;
+    height: 36px;
+    margin-bottom: 16px;
+}
+
+.product .maininfo #variants-container {
+    margin-bottom: 16px;
+}
+
+.product .maininfo p {
+    margin-top: 16px;
+}
+
+.product .maininfo #add-to-attentionlist {
+    margin-top: auto; /* 将按钮推到容器的底部 */
+}
+
+.product .maininfo button {
+    width: 90px;
+    height: 36px;
+    margin-right: 12px;
+}
+
+.product .maininfo .buy-and-cart-botton {
+    display: flex;
+}
+
+.product .maininfo p.payment-method {
+    margin-bottom: 60px;
+}
+
+.product .maininfo p.send-info {
+    margin-bottom: 60px;
+}
+
+.product-container .product-info {
+    margin: 24px;
+}
+
+.product-container .product-info h2 {
+    margin-bottom: 8px;
+}
+
+.product-container .product-reviews {
+    margin: 24px;
+}
+
+.product-container .product-reviews h2 {
+    margin-bottom: 8px;
+}
+
+.product-container .product-reviews .review {
+    margin: 12px;
+}
+
+.order-status-button-container {
+    margin-top: 134px;
+    margin-left: 360px;
+    margin-right: 360px;
+}
+
+#orders-title {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    margin-left: 360px;
+    margin-right: 360px;
+}
+
+#pending-orders-container {
+    margin-left: 360px;
+    margin-right: 360px;
+}
+
+#completed-orders-container {
+    margin-left: 360px;
+    margin-right: 360px;
+}
+
+h2#orders-title {
+    margin-top: 8px;
+    margin-left: 360px;
+    margin-right: 360px;
+}
+
+#order-detail-container{
+    margin-left: 360px;
+    margin-right: 360px;
+}
+
 .footer-container {
     display: flex;
     justify-content: center;
+    margin-top: 36px;
+    margin-bottom: 36px;
     margin-left: 360px;
     margin-right: 360px;
+}
+
+.history-container {
+    margin-top: 120px;
+    margin-left: 360px;
+    margin-right: 360px;
+}
+
+.history-container .product{
+    padding-top: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgb(230, 230, 230);
+}
+
+.history-container .product img {
+    width: 140px;
+    height: 140px;
+    margin-right: 12px;
+}
+
+.history-container .product a {
+    display: flex;
+}
+
+.history-container .product a div p {
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+
+.login-container {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center; /* 水平居中对齐 */
+    align-items: center; /* 垂直居中对齐 */
+    margin-top: 84px;
+}
+
+.login-container #login-form {
+    width: 300px; /* 设置合适的宽度 */
+    padding: 20px; /* 添加内边距 */
+    background-color: white; /* 设置背景色 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 添加阴影 */
+    border-radius: 8px; /* 添加圆角 */
+    text-align: center;
+}
+
+.login-container #login-form h1 {
+    margin-bottom: 16px; /* 添加底部间距 */
+    text-align: center; /* 居中对齐 */
+}
+
+#login-form > div:nth-child(2) {
+    margin-bottom: 16px; /* 添加底部间距 */
+    text-align: center; /* 居中对齐 */
+}
+
+.login-container #login-form .input {
+    text-align: center; /* 居中对齐 */
+}
+
+.login-container #login-form .remember-and-forget {
+    display: flex; /* 使用 flex 布局 */
+    justify-content: space-between; /* 确保两个按钮之间的间距 */
+    margin-left: 26px;
+    margin-right: 26px;
+    margin-top: 16px; /* 添加顶部间距 */
+    margin-bottom: 16px; /* 添加底部间距 */
+}
+
+#login-form > form > button {
+    width: 210px; /* 设置按钮宽度 */
+    height: 36px; /* 设置按钮高度 */
+    margin-bottom: 16px; /* 添加底部间距 */
+    background-color: rgb(221, 28, 28); /* 设置背景色 */
+    color: white; /* 设置文字颜色 */
+    border: none; /* 移除边框 */
+    cursor: pointer; /* 设置鼠标样式为手型 */
+    font-size: 16px;
+    border-radius: 6px; /* 添加圆角 */
+}
+
+#login-form > div:nth-child(4) > div:nth-child(1) {
+    margin-bottom: 8px; /* 添加底部间距 */
+}
+
+#login-form .test-account-area {
+    margin-top: 16px; /* 添加顶部间距 */
+}
+
+.member-centre-announcement {
+    margin-top: 60px;
+    margin-left: 360px;
+}
+
+.discount-page-announcement {
+    margin-top: 60px;
+    margin-left: 360px;
 }

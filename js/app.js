@@ -116,4 +116,17 @@ document.addEventListener("DOMContentLoaded", function() {
             productCardContainer.appendChild(productCard);
         });
     });
+
+  // 自动轮播广告图片
+  const scrollContent = document.querySelector('.scrollcontent');
+  const images = scrollContent.querySelectorAll('img');
+  let currentIndex = 0;
+
+  function showNextImage() {
+      currentIndex = (currentIndex + 1) % images.length;
+      const offset = -currentIndex * scrollContent.clientWidth;
+      scrollContent.style.transform = `translateX(${offset}px)`;
+  }
+
+  setInterval(showNextImage, 5000); // 每5秒切换一次图片
 });

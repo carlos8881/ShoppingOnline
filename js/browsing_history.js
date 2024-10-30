@@ -14,9 +14,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     productDiv.innerHTML = `
                         <a href="product.html?id=${item.product_id}">
                             <img src="${item.image_url}" alt="${item.name}">
-                            <p>${item.name}</p>
-                            <p>$${item.base_price}</p>
-                            <p>瀏覽時間: ${new Date(item.viewed_at).toLocaleString()}</p>
+                            <div>
+                                <p>${item.name}</p>
+                                <p>$${item.base_price}</p>
+                                <p>瀏覽時間: ${new Date(item.viewed_at).toLocaleString()}</p>
+                            </div>
                         </a>
                     `;
 

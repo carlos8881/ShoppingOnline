@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => response.json())
             .then(products => {
                 const productCardContainer = document.querySelector('.product-card-container');
-                const header = document.querySelector('.all-products-container .header');
+                const header = document.querySelector('.all-products-container-categories-page .header');
                 productCardContainer.innerHTML = ''; // 清空现有商品卡
 
                 if (products.length === 0) {

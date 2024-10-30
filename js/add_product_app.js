@@ -149,17 +149,22 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         const formData = new FormData(event.target);
 
-        console.log('Form Data:', formData); // 調試輸出
+        console.log('Form Data:', formData); // 调试输出
 
-        const response = await fetch(`${window.AppConfig.API_URL}/products/add-products`, {
-            method: 'POST',
-            body: formData
-        });
+        try {
+            const response = await fetch(`${window.AppConfig.API_URL}/products/add-products`, {
+                method: 'POST',
+                body: formData
+            });
 
-        if (response.ok) {
-            alert('新商品添加成功');
-        } else {
-            alert('添加商品失敗');
+            if (response.ok) {
+                alert('新商品添加成功');
+            } else {
+                alert('添加商品失败');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('添加商品失败');
         }
     });
 });

@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const addToAttentionlistButton = document.createElement('button');
     addToAttentionlistButton.textContent = '加入追蹤清單';
     addToAttentionlistButton.id = 'add-to-attentionlist';
-    document.querySelector('.product').appendChild(addToAttentionlistButton);
+    document.querySelector('.maininfo').appendChild(addToAttentionlistButton);
 
     addToAttentionlistButton.addEventListener('click', () => {
         const account = localStorage.getItem('account');

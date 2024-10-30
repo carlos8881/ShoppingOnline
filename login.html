@@ -29,12 +29,14 @@
                         <label for="password">密碼</label>
                         <input type="password" id="password" name="password" placeholder="請輸入密碼">
                     </div>
-                    <div class="remember">
-                        <input type="checkbox" id="remember" name="remember">
-                        <label for="remember">記住我</label>
-                    </div>
-                    <div>
-                        <a href="">忘記密碼?</a>
+                    <div class="remember-and-forget">
+                        <div class="remember">
+                            <input type="checkbox" id="remember" name="remember">
+                            <label for="remember">記住我</label>
+                        </div>
+                        <div>
+                            <a href="">忘記密碼?</a>
+                        </div>
                     </div>
                     <button type="button" onclick="validateAndLogin()">登入</button>
                 </form>
@@ -43,6 +45,9 @@
                     <div>
                         <button id="google-login"><i class='bx bxl-google bx-md'></i></button>
                     </div>
+                </div>
+                <div class="test-account-area">
+                    <button id="test-account-botton">登入測試用帳號</button>
                 </div>
             </div>
             <div id="register-form" style="display: none;">
@@ -76,19 +81,11 @@
     </div>
     <footer class="footer-container">
         <div class="footer">
-            <div class="footer-logo">
-                <img src="images/logo.png" alt="logo">
-            </div>
-            <div class="footer-text">
-                <p>公司地址：台北市信義區信義路五段7749號</p>
-                <p>客服專線：0800-123-456</p>
-                <p>客服信箱：
-            </div>
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="js/config.js"></script>
-    <script src="js/app.js"></script>
+    <!-- <script src="js/app.js"></script> -->
     <script src="js/member.js"></script>
     <script type="module">
         // Import the functions you need from the SDKs you need

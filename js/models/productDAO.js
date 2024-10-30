@@ -12,6 +12,14 @@ class ProductDAO {
         this.db.query(query, [name, base_price, description, has_variants], callback);
     }
 
+    addProductImage(productId, imageUrl, isCover, callback) {
+        const query = `
+            INSERT INTO product_images (product_id, image_url, is_cover)
+            VALUES (?, ?, ?)
+        `;
+        this.db.query(query, [productId, imageUrl, isCover], callback);
+    }
+
     getProductById(productId, callback) {
         const query = `
             SELECT p.id, p.name, p.base_price, p.description, p.has_variants, pi.image_url

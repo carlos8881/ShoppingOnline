@@ -12,12 +12,31 @@ class ProductService {
             if (err) return callback(err);
 
             const productId = result.insertId;
-            const { main_category, sub_category } = product;
+            const { main_category, sub_category, coverImage, contentImages } = product;
 
             this.categoryDAO.addProductCategory(productId, main_category, (err) => {
                 if (err) return callback(err);
 
-                this.categoryDAO.addProductCategory(productId, sub_category, callback);
+                this.categoryDAO.addProductCategory(productId, sub_category, (err) => {
+                    if (err) return callback(err);
+
+                    this.productDAO.addProductImage(productId, coverImage, true, (err) => {
+                        if (err) return callback(err);
+
+                        const imageTasks = contentImages.map(image => {
+                            return new Promise((resolve, reject) => {
+                                this.productDAO.addProductImage(productId, image, false, (err) => {
+                                    if (err) reject(err);
+                                    else resolve();
+                                });
+                            });
+                        });
+
+                        Promise.all(imageTasks)
+                            .then(() => callback(null))
+                            .catch(callback);
+                    });
+                });
             });
         });
     }

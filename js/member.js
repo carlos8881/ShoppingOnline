@@ -94,7 +94,22 @@ document.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('account').value = savedAccount;
         document.getElementById('remember').checked = true;
     }
+
+    // Check URL parameters to show the register form if needed
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('form') === 'register') {
+        toggleForm('showRegister');
+    }
+
+    // 为测试账号按钮添加点击事件监听器
+    document.getElementById('test-account-botton').addEventListener('click', loginWithTestAccount);
 });
+
+function loginWithTestAccount() {
+    document.getElementById('account').value = 'tester1';
+    document.getElementById('password').value = 'tester1';
+    validateAndLogin();
+}
 
 function validateAndLogin() {
     const account = document.getElementById('account').value;
