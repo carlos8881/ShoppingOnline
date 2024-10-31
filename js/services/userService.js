@@ -4,7 +4,7 @@ const userDAO = new UserDAO(db);
 
 class UserService {
     getUserByAccount(account) {
-        return userDAO.getUserByAccount(account);
+        return userDAO.getUserByAccountPromise(account);
     }
 }
 

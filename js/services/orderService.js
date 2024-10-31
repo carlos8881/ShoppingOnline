@@ -10,7 +10,7 @@ class OrderService {
     }
 
     async checkout(account, selectedItems, deliveryMethod) {
-        const user = await this.userDAO.getUserByAccount(account);
+        const user = await this.userDAO.getUserByAccountPromise(account);
         if (!user) {
             throw new Error('User not found');
         }
@@ -47,7 +47,7 @@ class OrderService {
     }
 
     async getOrders(account) {
-        const user = await this.userDAO.getUserByAccount(account);
+        const user = await this.userDAO.getUserByAccountPromise(account);
         if (!user) {
             throw new Error('User not found');
         }

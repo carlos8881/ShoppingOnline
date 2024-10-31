@@ -8,7 +8,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateCart() {
         fetch(`${window.AppConfig.API_URL}/cart/get-cart?account=${account}`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(error => { throw new Error(error.error); });
+                }
+                return response.json();
+            })
             .then(cartItems => {
                 const cartContainer = document.querySelector('.cart-container');
                 const totalQuantityElement = document.getElementById('total-quantity');
@@ -110,9 +115,9 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // 如果商品數量小於等於0，則刪除該商品
+                // 如果商品數量小於等於0，則刪除詀商品
                 if (data.newQuantity <= 0) {
-                    // 從 DOM 中移除該商品
+                    // 從 DOM 中移除詀商品
                     const itemDiv = document.querySelector(`.cart-item input[data-product-id="${productId}"][data-variant-id="${variantId}"]`).closest('.cart-item');
                     itemDiv.remove();
                     // 更新結帳詳情和全選狀態
@@ -144,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // 從 DOM 中移除該商品
+                // 從 DOM 中移除詀商品
                 const itemDiv = document.querySelector(`.cart-item input[data-product-id="${productId}"][data-variant-id="${variantId}"]`).closest('.cart-item');
                 itemDiv.remove();
                 if (updateCartAfterRemoval) {
