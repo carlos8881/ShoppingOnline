@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-review-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: product-review-service
+  template:
+    metadata:
+      labels:
+        app: product-review-service
+    spec:
+      containers:
+      - name: product-review-service
+        image: carlos8881/product-review-service:latest
+        ports:
+        - containerPort: 3006
