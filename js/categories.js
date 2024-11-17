@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function() { 
     const urlParams = new URLSearchParams(window.location.search);
     const categoryId = urlParams.get('category_id');
 
@@ -55,14 +55,4 @@ document.addEventListener("DOMContentLoaded", function() {
     if (categoryId) {
         loadProductsByCategory(categoryId);
     }
-
-    // 監聽分類連結的點擊事件
-    document.querySelector('.category').addEventListener('click', function(event) {
-        if (event.target.tagName === 'A') {
-            event.preventDefault();
-            const newCategoryId = new URL(event.target.href).searchParams.get('category_id');
-            loadProductsByCategory(newCategoryId);
-            history.pushState(null, '', `categories.html?category_id=${newCategoryId}`);
-        }
-    });
 });

@@ -53,9 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const statusSelect = document.createElement('select');
                 const statusMap = {
                     'Pending': '待處理',
-                    'Shipped': '已出貨',
-                    'Delivered': '已送達',
-                    'Cancelled': '已取消'
+                    'Delivered': '已送達'
                 };
                 Object.keys(statusMap).forEach(status => {
                     const option = document.createElement('option');
