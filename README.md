@@ -1,7 +1,6 @@
 # README
 ## 前言:
-這個專案僅作為程式與系統設計的實作練習，提供公司方與面試官測試
-專案連結 https://d2xzrt59b0ykdk.cloudfront.net
+這個專案僅作為程式與系統設計的實作練習，提供公司方與面試官測試 [專案連結]([https://pages.github.com/](https://d2xzrt59b0ykdk.cloudfront.net))
 
 ## 專案介紹與功能:
 借鑒大型電商網站設計功能與應用AWS雲服務
