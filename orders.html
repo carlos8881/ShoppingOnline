@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Online 訂單</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="all_orders_page_style.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
@@ -18,10 +18,15 @@
             <h2>訂單</h2>
         </div>
     </header>
-    <div id="orders-container">
-        <!-- 訂單內容將由 JavaScript 動態生成 -->
+    <div class="order-status-button-container">
+        <button id="show-pending-orders">未完成訂單</button>
+        <button id="show-completed-orders">完成的訂單</button>
     </div>
+    <h2 id="orders-title"></h2>
+    <div id="pending-orders-container"></div>
+    <div id="completed-orders-container"></div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="js/config.js"></script>
     <script src="js/member.js"></script>
     <script src="js/orders.js"></script>
 </body>

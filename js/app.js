@@ -36,13 +36,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-  fetch('http://3.112.202.79:3000/get_categories')
+  fetch(`${window.AppConfig.API_URL}/categories/get_categories`)
     .then(response => response.json())
     .then(data => {
         const categoryContainer = document.querySelector('.category');
         categoryContainer.innerHTML = ''; // 清空现有分类
 
         data.forEach(category => {
+            const categoryContainerDiv = document.createElement('div');
+            categoryContainerDiv.classList.add('category-container');
+
             const categoryDiv = document.createElement('div');
             const categoryLink = document.createElement('a');
             categoryLink.href = `categories.html?category_id=${category.id}`;
@@ -61,24 +64,25 @@ document.addEventListener("DOMContentLoaded", function() {
                     subcategoryList.appendChild(subcategoryLink);
                 });
 
-                categoryDiv.appendChild(subcategoryList);
+                categoryContainerDiv.appendChild(subcategoryList);
 
                 // 添加鼠标悬停事件
-                categoryDiv.addEventListener('mouseenter', () => {
+                categoryContainerDiv.addEventListener('mouseenter', () => {
                     subcategoryList.style.display = 'block';
                 });
 
-                categoryDiv.addEventListener('mouseleave', () => {
+                categoryContainerDiv.addEventListener('mouseleave', () => {
                     subcategoryList.style.display = 'none';
                 });
             }
 
-            categoryContainer.appendChild(categoryDiv);
+            categoryContainerDiv.appendChild(categoryDiv);
+            categoryContainer.appendChild(categoryContainerDiv);
         });
     });
 
   // Fetch products and populate product cards
-  fetch('http://3.112.202.79:3000/get-products')
+  fetch(`${window.AppConfig.API_URL}/products/get-products`)
     .then(response => response.json())
     .then(products => {
         const productCardContainer = document.querySelector('.product-card-container');
@@ -112,4 +116,17 @@ document.addEventListener("DOMContentLoaded", function() {
             productCardContainer.appendChild(productCard);
         });
     });
+
+  // 自动轮播广告图片
+  const scrollContent = document.querySelector('.scrollcontent');
+  const images = scrollContent.querySelectorAll('img');
+  let currentIndex = 0;
+
+  function showNextImage() {
+      currentIndex = (currentIndex + 1) % images.length;
+      const offset = -currentIndex * scrollContent.clientWidth;
+      scrollContent.style.transform = `translateX(${offset}px)`;
+  }
+
+  setInterval(showNextImage, 5000); // 每5秒切换一次图片
 });

@@ -1,13 +1,13 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function() { 
     const urlParams = new URLSearchParams(window.location.search);
     const categoryId = urlParams.get('category_id');
 
     function loadProductsByCategory(categoryId) {
-        fetch(`http://3.112.202.79:3000/get-products-by-category?category_id=${categoryId}`)
+        fetch(`${window.AppConfig.API_URL}/products/get-products-by-category?category_id=${categoryId}`)
             .then(response => response.json())
             .then(products => {
                 const productCardContainer = document.querySelector('.product-card-container');
-                const header = document.querySelector('.all-products-container .header');
+                const header = document.querySelector('.all-products-container-categories-page .header');
                 productCardContainer.innerHTML = ''; // 清空现有商品卡
 
                 if (products.length === 0) {
@@ -55,14 +55,4 @@ document.addEventListener("DOMContentLoaded", function() {
     if (categoryId) {
         loadProductsByCategory(categoryId);
     }
-
-    // 監聽分類連結的點擊事件
-    document.querySelector('.category').addEventListener('click', function(event) {
-        if (event.target.tagName === 'A') {
-            event.preventDefault();
-            const newCategoryId = new URL(event.target.href).searchParams.get('category_id');
-            loadProductsByCategory(newCategoryId);
-            history.pushState(null, '', `categories.html?category_id=${newCategoryId}`);
-        }
-    });
 });

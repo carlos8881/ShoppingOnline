@@ -67,7 +67,7 @@ function validateAndRegister() {
         const phoneNumber = document.getElementById('new-phone-number').value;
         const email = document.getElementById('new-email').value;
 
-        fetch('http://localhost:3000/register', {
+        fetch(`${window.AppConfig.API_URL}/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -94,21 +94,41 @@ document.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('account').value = savedAccount;
         document.getElementById('remember').checked = true;
     }
+
+    // Check URL parameters to show the register form if needed
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('form') === 'register') {
+        toggleForm('showRegister');
+    }
+
+    // 为测试账号按钮添加点击事件监听器
+    document.getElementById('test-account-botton').addEventListener('click', loginWithTestAccount);
 });
+
+function loginWithTestAccount() {
+    document.getElementById('account').value = 'tester1';
+    document.getElementById('password').value = 'tester1';
+    validateAndLogin();
+}
 
 function validateAndLogin() {
     const account = document.getElementById('account').value;
     const password = document.getElementById('password').value;
     const remember = document.getElementById('remember').checked;
 
-    fetch('http://localhost:3000/login', {
+    fetch(`${window.AppConfig.API_URL}/auth/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ account, password })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(text => { throw new Error(text) });
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.message === 'Login successful') {
             if (remember) {
@@ -124,6 +144,6 @@ function validateAndLogin() {
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error logging in');
+        alert(error.message);
     });
 };

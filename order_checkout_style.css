@@ -1,0 +1,70 @@
+* {
+    font-family: "Noto Sans TC", sans-serif; /* 設定所有元素的字體為 Noto Sans TC */
+    padding: 0; /* 移除所有元素的內邊距 */
+    margin: 0; /* 移除所有元素的外邊距 */
+    box-sizing: border-box; /* 設置 box-sizing 為 border-box，確保內邊距和邊框包含在元素的總寬度和高度內 */
+}
+
+body {
+    margin-left: 360px;
+    margin-right: 360px;
+}
+
+.headcontent {
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.headcontent .logo {
+    display: flex;
+    justify-content: center; /* 水平居中对齐 */
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid rgb(230, 230, 230);
+}
+
+#order-items-container .order-item img {
+    width: 100px;
+    height: 100px;
+    margin-right: 20px;
+}
+
+.order-item .product_name {
+    width: 660px;
+    font-size: 16px;
+    margin-right: 20px;
+}
+
+.order-item .amount_area {
+    width: 100px;
+    margin-left: 250px;
+}
+
+.delivery-method-area {
+    margin: 12px;
+}
+
+.total-price-count-area {
+    display: flex;
+    margin: 12px;
+}
+
+.total-price {
+    font-size: 22px;
+}
+
+#place-order-button {
+    font-size: 22px;
+    margin: 12px;
+    margin-left: 858px;
+    padding: 12px;
+    background-color: rgb(231, 22, 22);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}

@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    fetch(`http://3.112.202.79:3000/get-cart?account=${account}`)
+    fetch(`${window.AppConfig.API_URL}/cart/get-cart?account=${account}`)
         .then(response => response.json())
         .then(cartItems => {
             const orderItemsContainer = document.getElementById('order-items-container');
@@ -25,22 +25,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 itemDiv.innerHTML = `
                     <img src="${item.image_url}" alt="${item.name}" class="order-item-image">
-                    <p>${item.name}</p>
-                    <p>${item.price}</p>
-                    <p>${item.quantity}</p>
-                    <p>${itemTotal}</p>
+                    <p class="product_name">${item.name} ${item.variant_combination ? `(${item.variant_combination})` : ''}</p>
+                    <div class="amount_area">
+                        <p>單價${item.price}元</p>
+                        <p>${item.quantity}件</p>
+                        <p>總價${itemTotal}元</p>
+                    </div>
                 `;
 
                 orderItemsContainer.appendChild(itemDiv);
                 totalPrice += itemTotal;
             });
 
-            totalPriceElement.textContent = totalPrice;
+            totalPriceElement.textContent = totalPrice.toFixed(2); // 確保顯示兩位小數
 
             function updateCheckoutPrice() {
                 const deliveryPrice = parseInt(deliveryMethodSelect.selectedOptions[0].getAttribute('data-price'));
-                deliveryPriceElement.textContent = deliveryPrice;
-                checkoutPriceElement.textContent = totalPrice + deliveryPrice;
+                deliveryPriceElement.textContent = deliveryPrice.toFixed(2); // 確保顯示兩位小數
+                checkoutPriceElement.textContent = (totalPrice + deliveryPrice).toFixed(2); // 確保顯示兩位小數
             }
 
             deliveryMethodSelect.addEventListener('change', updateCheckoutPrice);
@@ -48,14 +50,22 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('place-order-button').addEventListener('click', function () {
                 const deliveryMethod = deliveryMethodSelect.value;
 
-                fetch('http://3.112.202.79:3000/checkout', {
+                // 確保 selectedItems 包含正確的變體價格
+                const selectedItems = cartItems.map(item => ({
+                    product_id: item.product_id,
+                    variant_id: item.variant_id,
+                    quantity: item.quantity,
+                    price: item.price
+                }));
+
+                fetch(`${window.AppConfig.API_URL}/orders/checkout`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         account: account,
-                        selectedItems: cartItems,
+                        selectedItems: selectedItems,
                         deliveryMethod: deliveryMethod
                     })
                 })
