@@ -17,7 +17,7 @@ body {
 
 .headcontent .logo {
     display: flex;
-    justify-content: center; /* 水平居中对齐 */
+    justify-content: center; /* 水平置中對齊 */
 }
 
 .cart-item {
@@ -78,7 +78,7 @@ body {
 .checkout-details {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* 垂直居中对齐 */
+    align-items: center; /* 垂直置中對齊 */
     padding: 12px;
     border-top: 1px solid rgb(230, 230, 230);
 }

@@ -17,7 +17,7 @@ body {
 
 .headcontent .logo {
     display: flex;
-    justify-content: center; /* 水平居中对齐 */
+    justify-content: center; /* 水平置中對齊 */
 }
 
 .headcontent h2 {

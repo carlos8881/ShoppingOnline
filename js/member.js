@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         toggleForm('showRegister');
     }
 
-    // 为测试账号按钮添加点击事件监听器
+    // 為測試帳號按鈕添加點擊事件監聽器
     document.getElementById('test-account-botton').addEventListener('click', loginWithTestAccount);
 });
 

@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function() {
     .then(response => response.json())
     .then(data => {
         const categoryContainer = document.querySelector('.category');
-        categoryContainer.innerHTML = ''; // 清空现有分类
+        categoryContainer.innerHTML = ''; // 清空現有分類
 
         data.forEach(category => {
             const categoryContainerDiv = document.createElement('div');
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if (category.subcategories.length > 0) {
                 const subcategoryList = document.createElement('div');
                 subcategoryList.classList.add('subcategory-list');
-                subcategoryList.style.display = 'none'; // 初始隐藏子分类
+                subcategoryList.style.display = 'none'; // 初始隱藏子分類
 
                 category.subcategories.forEach(subcategory => {
                     const subcategoryLink = document.createElement('a');
@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 categoryContainerDiv.appendChild(subcategoryList);
 
-                // 添加鼠标悬停事件
+                // 添加游標懸停事件
                 categoryContainerDiv.addEventListener('mouseenter', () => {
                     subcategoryList.style.display = 'block';
                 });
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function() {
     .then(response => response.json())
     .then(products => {
         const productCardContainer = document.querySelector('.product-card-container');
-        productCardContainer.innerHTML = ''; // 清空现有商品卡
+        productCardContainer.innerHTML = ''; // 清空現有商品卡
 
         products.forEach(product => {
             const productCard = document.createElement('div');
@@ -117,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-  // 自动轮播广告图片
+  // 自動輪播廣告圖片
   const scrollContent = document.querySelector('.scrollcontent');
   const images = scrollContent.querySelectorAll('img');
   let currentIndex = 0;
@@ -128,5 +128,5 @@ document.addEventListener("DOMContentLoaded", function() {
       scrollContent.style.transform = `translateX(${offset}px)`;
   }
 
-  setInterval(showNextImage, 5000); // 每5秒切换一次图片
+  setInterval(showNextImage, 5000); // 每5秒切換一次圖片
 });

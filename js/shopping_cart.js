@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const checkoutPriceElement = document.getElementById('checkout-price');
                 const selectAllCheckbox = document.getElementById('select-all');
 
-                cartContainer.innerHTML = ''; // 清空现有购物车内容
+                cartContainer.innerHTML = ''; // 清空現有購物車内容
                 let totalQuantity = 0;
                 let totalPrice = 0;
 
@@ -149,7 +149,6 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // 從 DOM 中移除詀商品
                 const itemDiv = document.querySelector(`.cart-item input[data-product-id="${productId}"][data-variant-id="${variantId}"]`).closest('.cart-item');
                 itemDiv.remove();
                 if (updateCartAfterRemoval) {

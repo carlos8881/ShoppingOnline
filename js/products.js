@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     .then(response => response.json())
                     .then(categories => {
                         const breadcrumbContainer = document.querySelector('.breadcrumb');
-                        breadcrumbContainer.innerHTML = ''; // 清空现有分类导览
+                        breadcrumbContainer.innerHTML = ''; // 清空現有分類導覽
 
                         categories.forEach((category, index) => {
                             const categoryLink = document.createElement('a');

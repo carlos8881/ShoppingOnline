@@ -35,7 +35,7 @@ exports.getCategoriesForAddProduct = (req, res) => {
             return;
         }
 
-        // 展平分類結構
+        // 展開分類結構
         const flattenCategories = (categories) => {
             let flatCategories = [];
 
@@ -54,7 +54,7 @@ exports.getCategoriesForAddProduct = (req, res) => {
             return flatCategories;
         };
 
-        // 將嵌套結構展平
+        // 將嵌套結構展開
         const categories = results.reduce((acc, category) => {
             if (category.parent_id === null) {
                 acc.push({ ...category, subcategories: [] });

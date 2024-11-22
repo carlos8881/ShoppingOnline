@@ -5,12 +5,12 @@ class AuthService {
         this.userDAO = new UserDAO(db);
     }
 
-    // 注册用户的方法
+    // 註冊用户的方法
     register(account, password, phoneNumber, email, callback) {
         this.userDAO.createUser(account, password, phoneNumber, email, callback);
     }
 
-    // 一般账号密码登录的方法
+    // 一般帳號密碼登入的方法
     login(account, password, callback) {
         this.userDAO.getUserByAccount(account, (err, results) => {
             if (err) return callback(err);
@@ -22,7 +22,7 @@ class AuthService {
         });
     }
 
-    // Google 登录的方法
+    // Google 登入的方法
     googleLogin(account, callback) {
         const query = 'INSERT INTO users (account, auth_provider) VALUES (?, ?) ON DUPLICATE KEY UPDATE auth_provider = VALUES(auth_provider)';
         this.userDAO.db.query(query, [account, 'google'], (err, results) => {

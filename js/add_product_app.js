@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         const formData = new FormData(event.target);
 
-        console.log('Form Data:', formData); // 调试输出
+        console.log('Form Data:', formData); // 調試輸出
 
         try {
             const response = await fetch(`${window.AppConfig.API_URL}/products/add-products`, {
