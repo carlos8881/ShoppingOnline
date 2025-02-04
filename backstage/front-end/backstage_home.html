@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>後台首頁</title>
+    <link rel="stylesheet" href="backstage_style.css">
+</head>
+<body>
+    <header class="headcontent" id="headApp">
+        <div id="topmenu">
+        </div> <!-- Vue管理頂部選單 -->
+    </header>
+    <div class="main">
+        <div class="sidebar">
+            <div id="system_menu"></div> <!-- Vue管理系統選單 -->
+        </div>
+        <div class="content">
+            <div id="home_Preview">
+                <div class="week_orders">
+                    <h2>本周訂單數</h2>
+                </div>
+                <div class="week_sales">
+                    <h2>本周銷售額</h2>
+                </div>
+            </div>
+            <div id="system_link" class="system_link">
+                <h2>系統捷徑</h2>
+                <div class="content">
+                    <div>
+                        <h3>儀錶板</h3>
+                    </div>
+                    <div>
+                        <a href="product_management.html">
+                            <h3>商品管理</h3>
+                        </a>
+                    </div>
+                    <div>
+                        <h3>訂單管理</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+
+    </footer>
+    <script src="dist/bundle.js"></script> <!-- 引用 Webpack 打包生成的文件 -->
+</body>
+</html>

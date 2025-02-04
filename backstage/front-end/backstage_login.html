@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入頁面</title>
+    <link rel="stylesheet" href="backstage_style.css">
+</head>
+<body>
+    <div class="login-container">
+        <h2>登入</h2>
+        <form id="loginForm">
+            <label for="username">用戶名:</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">密碼:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">登入</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // 發送 AJAX 請求到後端的登入 API
+            fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json' // 指定請求的內容類型為 JSON
+                },
+                body: JSON.stringify({ username, password }) // 將用戶名和密碼轉換為 JSON 字符串並作為請求體
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('登入成功');
+                    window.location.href = 'backstage_home.html';
+                } else {
+                    alert('用戶名或密碼錯誤');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('登入失敗');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,22 +1,3 @@
-function showDownloadAlert() {
-  alert('APP下載未開放');
-};
-
-new Vue({
-  el: '#headApp',
-  data: {
-    showAlert: false
-  },
-  methods: {
-    showDownloadAlert() {
-      alert('APP下載未開放');
-    }
-  },
-  mounted() {
-    document.getElementById('app-download-link').addEventListener('click', this.showDownloadAlert);
-  }
-});
-
 document.addEventListener('DOMContentLoaded', () => {
   const account = localStorage.getItem('account');
   const loginButton = document.querySelector('.right li a[href="login.html"]');

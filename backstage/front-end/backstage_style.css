@@ -1,0 +1,45 @@
+* {
+    font-family: "Noto Sans TC", sans-serif; /* 設定所有元素的字體為 Noto Sans TC */
+    padding: 0; /* 移除所有元素的內邊距 */
+    margin: 0; /* 移除所有元素的外邊距 */
+    box-sizing: border-box; /* 設置 box-sizing 為 border-box，確保內邊距和邊框包含在元素的總寬度和高度內 */
+}
+
+.main {
+    display: flex;
+}
+
+.sidebar {
+    width: 15%; /* 設置側邊欄寬度 */
+    background-color: #f0f0f0; /* 假設側邊欄背景色 */
+    height: 100vh; /* 設置側邊欄高度 */
+}
+
+body > div > div.content {
+    width: 85%; /* 設置內容區域寬度 */
+}
+
+#home_Preview {
+    display: flex;
+    align-items: center;
+    height: 500px;
+}
+
+#home_Preview div {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.system_link .content {
+    display: flex;
+}
+
+.system_link .content div {
+    display: flex;
+    height: 300px;
+    width: 33.33%;
+    justify-content: center;
+    align-items: center;
+}

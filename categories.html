@@ -9,21 +9,7 @@
 </head>
 <body>
     <header class="headcontent" id="headApp">
-        <div class="topmenu">
-            <ul class="left">
-                <li><a href="index.html">首頁</a></li>
-                <li><a href="" id="app-download-link">APP下載</a></li>
-            </ul>
-            <ul class="right">
-                <li><a href="login.html">登入</a></li>
-                <li><a href="login.html?form=register" onclick="toggleForm('showRegister')">註冊</a></li>
-                <li><a href="member_centre.html">會員中心</a></li>
-                <li><a href="orders.html">訂單</a></li>
-                <li><a href="attention_list.html">關注清單</a></li>
-                <li><a href="discount.html">折價券</a></li>
-                <li><a href="shopping_cart.html">購物車</a></li>
-            </ul>
-        </div>
+        <div id="topmenu"></div> <!-- Vue管理頂部選單 -->
         <div class="headsearch-container">
             <div class="headsearch">
                 <div class="logo">
@@ -33,7 +19,6 @@
                 </div>
                 <input type="text" name="search" placeholder="搜尋商品">
                 <button type="submit">搜尋</button>
-                <div class="hot search">熱門></div>
             </div>
         </div>
         <div class="category">
@@ -48,9 +33,6 @@
     </div>
     <footer class="footer-container">
         <div class="footer">
-            <div class="footer-logo">
-                <img src="images/logo.png" alt="logo">
-            </div>
             <div class="footer-text">
                 <p>公司地址：台北市信義區信義路五段7749號</p>
                 <p>客服專線：0800-123-456</p>
@@ -63,5 +45,6 @@
     <script src="js/app.js"></script>
     <script src="js/categories.js"></script>
     <button id="to-prev-next"><i class='bx bx-chevron-down bx-md'></i></button>
+    <script src="dist/bundle.js"></script>
 </body>
 </html>

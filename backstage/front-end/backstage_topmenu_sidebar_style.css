@@ -1,0 +1,20 @@
+* {
+    font-family: "Noto Sans TC", sans-serif; /* 設定所有元素的字體為 Noto Sans TC */
+    padding: 0; /* 移除所有元素的內邊距 */
+    margin: 0; /* 移除所有元素的外邊距 */
+    box-sizing: border-box; /* 設置 box-sizing 為 border-box，確保內邊距和邊框包含在元素的總寬度和高度內 */
+}
+
+.main {
+    display: flex;
+}
+
+ul {
+    list-style-type: none; /* 移除圓點 */
+}
+
+.sidebar {
+    width: 15%; /* 設置側邊欄寬度 */
+    background-color: #f0f0f0; /* 假設側邊欄背景色 */
+    height: 100vh; /* 設置側邊欄高度 */
+}

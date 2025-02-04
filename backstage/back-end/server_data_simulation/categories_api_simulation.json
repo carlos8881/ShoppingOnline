@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "name": "3C",
+    "parent_id": null,
+    "subcategories": [
+      {
+        "id": 18,
+        "name": "AI旗艦館",
+        "parent_id": 1
+      }
+    ]
+  }
+]
