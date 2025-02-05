@@ -30,6 +30,8 @@ export default {
       window.location.href = 'backstage_login.html';
     },
     logout() {
+      // 清除 JWT Cookie
+      document.cookie = "jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       this.userStatus = '未登入';
       this.isLoggedIn = false; // 登出後，將使用者狀態改為未登入
       alert('已登出');
@@ -37,23 +39,36 @@ export default {
     setUserStatus(username) {
       this.userStatus = `用戶: ${username}`;
       this.isLoggedIn = true;
+    },
+    getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
     }
   },
   mounted() {
     // 檢查用戶是否已登入
-    fetch('/api/protected-endpoint', {
-      method: 'GET',
-      credentials: 'include' // 確保在請求中包含 Cookie
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.username) {
-        this.setUserStatus(data.username);
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
+    const token = this.getCookie('jwt');
+    console.log('JWT Token:', token); // 調試代碼，檢查是否獲取到 JWT
+    if (token) {
+      fetch('/api/user', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        credentials: 'include' // 確保請求攜帶 Cookie
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('User Data:', data); // 調試代碼，檢查是否獲取到用戶名
+        if (data.username) {
+          this.setUserStatus(data.username);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
   }
 };
 </script>
