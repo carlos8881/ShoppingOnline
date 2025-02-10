@@ -17,9 +17,15 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping
+    @GetMapping // 取得所有商品
     public ResponseEntity<List<Product>> getAllProducts() {
         List<Product> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
+    }
+
+    @DeleteMapping("/{id}") // 刪除商品
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
     }
 }

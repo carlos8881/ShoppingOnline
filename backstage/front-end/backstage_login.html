@@ -26,13 +26,14 @@
             // 發送 AJAX 請求到後端的登入 API
             fetch('http://localhost:8080/api/login', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json' // 指定請求的內容類型為 JSON
-                },
-                body: JSON.stringify({ username, password }) // 將用戶名和密碼轉換為 JSON 字符串並作為請求體
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ username, password })
             })
-            .then(response => {
-                if (response.ok) {
+            .then(response => response.json())
+            .then(data => {
+                if (data.token) {
+                    // 儲存 JWT Token 到 localStorage
+                    localStorage.setItem('jwt', data.token);
                     alert('登入成功');
                     window.location.href = 'backstage_home.html';
                 } else {

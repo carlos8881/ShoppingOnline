@@ -23,5 +23,8 @@
   "scripts": {
     "serve": "webpack serve --open",
     "build": "webpack --mode production"
+  },
+  "dependencies": {
+    "vue-router": "^4.5.0"
   }
 }

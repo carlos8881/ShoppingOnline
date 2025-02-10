@@ -7,66 +7,62 @@
       <a href="../../index.html">檢視前台</a>
     </div>
     <div class="menu-item">
-      <p v-if="isLoggedIn">{{ userStatus }}</p> <!-- 顯示使用者狀態(未登入或角色加名稱) -->
+      <p v-if="isLoggedIn">{{ userStatus }}</p> <!-- 顯示使用者狀態 -->
       <button v-else @click="login">登入</button> <!-- 未登入時顯示登入按鈕 -->
     </div>
-    <div class="menu-item" v-if="isLoggedIn">
-      <button @click="logout">登出</button> <!-- 狀態是登入時顯示 -->
+    <div class="menu-item" v-if="isLoggedIn"> <!-- 狀態是登入時顯示登出按鈕 -->
+      <button @click="logout">登出</button> 
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
+  data() { // 定義組件的狀態
     return {
       isLoggedIn: false,
-      userStatus: '未登入', // 用於顯示使用者狀態
+      userStatus: '', // 用於顯示使用者狀態
     };
   },
-  methods: {
+  methods: { // 定義組件的方法
     login() {
-      // 跳轉到登入頁面
-      window.location.href = 'backstage_login.html';
+      window.location.href = 'backstage_login.html'; // 跳轉到登入頁面
     },
     logout() {
-      // 清除 JWT Cookie
-      document.cookie = "jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      this.userStatus = '未登入';
+      localStorage.removeItem('jwt'); // 移除 JWT Token
+      this.userStatus = ''; // 清除使用者名稱
       this.isLoggedIn = false; // 登出後，將使用者狀態改為未登入
       alert('已登出');
     },
-    setUserStatus(username) {
-      this.userStatus = `用戶: ${username}`;
-      this.isLoggedIn = true;
-    },
-    getCookie(name) {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      if (parts.length === 2) return parts.pop().split(';').shift();
+    setUserStatus(username) { 
+      // 處理使用者狀態
+      this.userStatus = `${username}`; // 顯示使用者名稱
+      this.isLoggedIn = true; // 設為已登入狀態
     }
   },
   mounted() {
     // 檢查用戶是否已登入
-    const token = this.getCookie('jwt');
-    console.log('JWT Token:', token); // 調試代碼，檢查是否獲取到 JWT
+    const token = localStorage.getItem('jwt'); // 從 localStorage 獲取 JWT Token
+    console.log('JWT Token:', token); // 檢查是否獲取到 JWT
     if (token) {
-      fetch('/api/user', {
+      // 如果有 Token，則向後端發送請求獲取用戶資訊
+      fetch('http://localhost:8080/api/user', { 
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`
-        },
-        credentials: 'include' // 確保請求攜帶 Cookie
+        }
       })
-      .then(response => response.json())
+      .then(response => response.json()) // 解析 JSON 格式的回應
       .then(data => {
-        console.log('User Data:', data); // 調試代碼，檢查是否獲取到用戶名
-        if (data.username) {
-          this.setUserStatus(data.username);
+        // 處理獲取到的用戶資訊
+        console.log('User Data:', data); // 檢查是否獲取到用戶名
+        if (data.username) { // 如果有用戶名，則設置使用者狀態
+          this.setUserStatus(data.username); // 設置使用者狀態
         }
       })
       .catch(error => {
-        console.error('Error:', error);
+        // 處理錯誤
+        console.error('Error:', error); // 輸出錯誤訊息
       });
     }
   }

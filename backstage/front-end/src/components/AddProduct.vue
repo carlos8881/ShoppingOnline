@@ -1,0 +1,56 @@
+<!-- <template>
+    <div class="AddProduct">
+        <form id="addProductForm" enctype="multipart/form-data">
+            <div>
+                <label for="name">商品名稱:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div>
+                <label for="main_category">主分類:</label>
+                <select id="main_category" name="main_category" required>
+                </select>
+            </div>
+            <div id="sub_category_container" style="display: none;">
+                <label for="sub_category">子分類:</label>
+                <select id="sub_category" name="sub_category" required>
+                </select>
+            </div>
+            <div>
+                <label for="cover_image">商品封面圖:</label>
+                <input type="file" id="cover_image" name="cover_image" accept="image/*" required>
+            </div>
+            <div>
+                <label for="content_images">商品內容圖:</label>
+                <input type="file" id="content_images" name="content_images" accept="image/*" multiple>
+            </div>
+            <div>
+                <label for="description">商品描述:</label>
+                <textarea id="description" name="description"></textarea>
+            </div>
+            <div>
+                <label for="base_price">價格:</label>
+                <input type="number" id="base_price" name="base_price" step="0.01" required>
+            </div>
+            <div>
+                <label for="has_variants">是否加入規格:</label>
+                <input type="checkbox" id="has_variants" name="has_variants">
+            </div>
+            <div id="variants_container" style="display: none;">
+                <div>
+                    <label for="variant1_name">第一層變體名稱:</label>
+                    <input type="text" id="variant1_name" name="variant1_name">
+                    <button type="button" id="add_variant1_value">添加第一層變體值</button>
+                    <div id="variant1_values_list"></div>
+                </div>
+                <div>
+                    <label for="variant2_name">第二層變體名稱:</label>
+                    <input type="text" id="variant2_name" name="variant2_name">
+                    <button type="button" id="add_variant2_value">添加第二層變體值</button>
+                    <div id="variant2_values_list"></div>
+                </div>
+                <div id="variant_combinations_list"></div>
+            </div>
+            <button type="submit">添加商品</button>
+        </form>
+    </div>
+</template> -->

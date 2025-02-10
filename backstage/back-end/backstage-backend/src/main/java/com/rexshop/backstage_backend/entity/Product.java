@@ -1,12 +1,8 @@
 package com.rexshop.backstage_backend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Column;
 import java.time.LocalDateTime;
+import jakarta.persistence.*; // 引入 javax.persistence.* 包 用於加入獲取images
+import java.util.List; // 引入 java.util.List 包 用於加入獲取images
 
 @Entity // 標示這是一個 JPA 實體類
 @Table(name = "products") // 指定資料庫表名稱
@@ -27,6 +23,9 @@ public class Product {
 
     @Column(name = "has_variants")
     private Boolean hasVariants; // 是否有變體
+
+    @Transient // 不映射到資料庫
+    private List<ProductImage> images; // 添加 images 屬性
 
     // Getters and Setters 獲取與設定的公開方法
     public Long getId() {
@@ -77,4 +76,11 @@ public class Product {
         this.hasVariants = hasVariants;
     }
 
+    public List<ProductImage> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ProductImage> images) {
+        this.images = images;
+    }
 }

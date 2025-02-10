@@ -29,10 +29,10 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // 啟用 CORS
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/login").permitAll() // 允許未登入用戶訪問
+                        .requestMatchers("/api/categories").authenticated() // 確保已驗證的用戶可以訪問 /api/categories
                         .anyRequest().authenticated() // 其他 API 需要 JWT 驗證
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 使用無狀態
-                                                                                                              // Session
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 使用無狀態Session
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // 加入 JWT 過濾器
 
         return http.build();
