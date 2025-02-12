@@ -23,6 +23,15 @@ public class Category {
     @JsonIgnore
     private List<Category> subCategories;
 
+    // Default constructor
+    public Category() {
+    }
+
+    // Parameterized constructor
+    public Category(Long id) {
+        this.id = id;
+    }
+
     // Getters and Setters
     public Long getId() {
         return id;

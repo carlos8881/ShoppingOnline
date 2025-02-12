@@ -6,14 +6,14 @@ import java.util.Objects;
 public class ProductCategoryId implements Serializable {
 
     private Long product;
-    private Integer category;
+    private Long category;
 
     // Default constructor
     public ProductCategoryId() {
     }
 
     // Parameterized constructor
-    public ProductCategoryId(Long product, Integer category) {
+    public ProductCategoryId(Long product, Long category) {
         this.product = product;
         this.category = category;
     }
@@ -27,11 +27,11 @@ public class ProductCategoryId implements Serializable {
         this.product = product;
     }
 
-    public Integer getCategory() {
+    public Long getCategory() {
         return category;
     }
 
-    public void setCategory(Integer category) {
+    public void setCategory(Long category) {
         this.category = category;
     }
 

@@ -28,27 +28,27 @@
                     </select>
                 </div>
                 <div>
-                    <label for="cover_image">商品封面圖:</label>
+                    <label for="cover_image">商品封面圖:</label> <!-- 商品封面圖上傳 -->
                     <input type="file" id="cover_image" name="cover_image" accept="image/*" required>
                 </div>
                 <div>
-                    <label for="content_images">商品內容圖:</label>
+                    <label for="content_images">商品內容圖:</label> <!-- 商品內容圖上傳 -->
                     <input type="file" id="content_images" name="content_images" accept="image/*" multiple>
                 </div>
                 <div>
-                    <label for="description">商品描述:</label>
+                    <label for="description">商品描述:</label> <!-- 商品描述輸入框 -->
                     <textarea id="description" name="description"></textarea>
                 </div>
                 <div>
-                    <label for="base_price">價格:</label>
+                    <label for="base_price">價格:</label> <!-- 商品價格輸入框 -->
                     <input type="number" id="base_price" name="base_price" step="0.01" required>
                 </div>
                 <div>
-                    <label for="has_variants">是否加入規格:</label>
+                    <label for="has_variants">是否加入規格:</label> <!-- 是否加入規格 -->
                     <input type="checkbox" id="has_variants" name="has_variants">
                 </div>
                 <div id="variants_container" style="display: none;">
-                    <div class="variant">
+                    <div class="variant"> <!-- 規格名稱和價格輸入框 -->
                         <label for="variant_name_1">規格名稱:</label>
                         <input type="text" id="variant_name_1" name="variant_name_1">
                         <label for="variant_price_1">規格價格:</label>
@@ -73,7 +73,7 @@
             const mainCategorySelect = document.getElementById('main_category'); // 取得主分類下拉選單
             const subCategoryContainer = document.getElementById('sub_category_container'); // 取得子分類容器
             const subCategorySelect = document.getElementById('sub_category'); // 取得子分類下拉選單
-            const hasVariantsCheckbox = document.getElementById('has_variants'); // 取得是否加入規格的核取方塊
+            const hasVariantsCheckbox = document.getElementById('has_variants'); // 取得是否加入規格 的勾選框
             const variantsContainer = document.getElementById('variants_container'); // 取得規格容器
             const addVariantButton = document.getElementById('add_variant'); // 取得增加變體按鈕
             const removeVariantButton = document.getElementById('remove_variant'); // 取得減少變體按鈕
@@ -103,14 +103,14 @@
 
             function populateMainCategories(categories) { // 動態生成主分類選項
                 categories.forEach(category => { // 將每個主分類加入選項
-                    const option = document.createElement('option');
-                    option.value = category.id;
-                    option.textContent = category.name;
-                    mainCategorySelect.appendChild(option);
+                    const option = document.createElement('option'); // 創建選項元素
+                    option.value = category.id; // 設定選項值
+                    option.textContent = category.name; // 設定選項文字
+                    mainCategorySelect.appendChild(option); // 將選項加入主分類下拉選單
                 });
             }
 
-            mainCategorySelect.addEventListener('change', () => {
+            mainCategorySelect.addEventListener('change', () => { // 根據選擇的主分類獲取子分類
                 const selectedMainCategoryId = mainCategorySelect.value;
                 if (selectedMainCategoryId) {
                     fetch(`http://localhost:8080/api/categories/sub/${selectedMainCategoryId}`, {
@@ -138,21 +138,21 @@
                 }
             });
 
-            function populateSubCategories(categories) {
-                subCategorySelect.innerHTML = '';
-                categories.forEach(category => {
-                    const option = document.createElement('option');
-                    option.value = category.id;
-                    option.textContent = category.name;
-                    subCategorySelect.appendChild(option);
+            function populateSubCategories(categories) { // 動態生成子分類選項
+                subCategorySelect.innerHTML = ''; // 清空子分類下拉選單
+                categories.forEach(category => { // 將每個子分類加入選項
+                    const option = document.createElement('option'); // 創建選項元素
+                    option.value = category.id; // 設定選項值
+                    option.textContent = category.name; // 設定選項文字
+                    subCategorySelect.appendChild(option); // 將選項加入子分類下拉選單
                 });
             }
 
-            hasVariantsCheckbox.addEventListener('change', () => {
+            hasVariantsCheckbox.addEventListener('change', () => { // 根據是否加入規格的勾選框 顯示或隱藏規格容器
                 variantsContainer.style.display = hasVariantsCheckbox.checked ? 'block' : 'none';
             });
 
-            addVariantButton.addEventListener('click', () => {
+            addVariantButton.addEventListener('click', () => { // 增加規格
                 variantCount++;
                 const variantDiv = document.createElement('div');
                 variantDiv.classList.add('variant');
@@ -172,16 +172,47 @@
                 }
             });
 
-            document.getElementById('addProductForm').addEventListener('submit', async (event) => {
-                event.preventDefault();
-                const formData = new FormData(event.target);
-                console.log('Form data:', formData);
+            document.getElementById('addProductForm').addEventListener('submit', async (event) => { // 監聽表單提交事件
+                event.preventDefault(); // 阻止表單預設提交行為
+                const formData = new FormData(event.target); // 創建 FormData 物件
+
+                // 檢查必填字段是否已填寫
+                if (!formData.get('name') || !formData.get('main_category') || !formData.get('cover_image') || !formData.get('base_price')) {
+                    alert('請填寫所有必填字段');
+                    return;
+                }
+
+                // 確保 has_variants 參數被包含
+                if (!formData.has('has_variants')) { // 如果沒有勾選 has_variants
+                    formData.append('has_variants', 0); // 使用 append() 設定 FormData 內容 has_variants 為 0
+                } else { // 如果有勾選 has_variants
+                    formData.set('has_variants', 1); // 使用 set() 設定 FormData 內容 has_variants 為 1
+                }
+
+                // 如果沒有勾選 has_variants，移除所有變體名稱和價格
+                if (formData.get('has_variants') === '0') {
+                    for (let i = 1; i <= variantCount; i++) {
+                        formData.delete(`variant_name_${i}`);
+                        formData.delete(`variant_price_${i}`);
+                    }
+                }
+
+                // 檢查 FormData 內容
+                for (let [key, value] of formData.entries()) { // 使用 entries() 取得 FormData 內容
+                    console.log(`${key}: ${value}`); // 輸出 FormData 內容
+                }
 
                 try {
-                    const response = await fetch(`http://localhost:8080/api/products`, {
-                        method: 'POST',
+                    const response = await fetch(`http://localhost:8080/api/products`, { // 向API 發送 POST 請求
+                        method: 'POST', // 使用 POST 方法
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('jwt')}` // 添加 JWT Token
+                        },
                         body: formData
                     });
+
+                    const responseData = await response.json();
+                    console.log('Response data:', responseData);
 
                     if (response.ok) {
                         alert('新商品添加成功');
