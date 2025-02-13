@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 import TopMenu from './components/TopMenu.vue';
 import SystemMenu from './components/SystemMenu.vue';
-import ProductManagement from './components/ProductManagement.vue';
+import ProductManagement from './views/ProductManagement.vue';
 
 //創建 TopMenu Vue應用程式
 createApp(TopMenu).mount('#topmenu');

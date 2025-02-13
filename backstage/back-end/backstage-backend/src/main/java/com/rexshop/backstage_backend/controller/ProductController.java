@@ -72,4 +72,17 @@ public class ProductController {
             return ResponseEntity.status(500).body(null); // 返回錯誤狀態碼
         }
     }
+
+    @PutMapping("/{id}") // 更新商品
+    public ResponseEntity<Product> updateProduct(
+            @PathVariable Long id,
+            @RequestBody Product updatedProduct) {
+        try {
+            Product product = productService.updateProduct(id, updatedProduct);
+            return ResponseEntity.ok(product);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(null);
+        }
+    }
 }

@@ -4,14 +4,14 @@
             <h2>商品管理</h2>
         </div>
         <div class="product_management_content">
-            <div class="product_management_select">
+            <!-- <div class="product_management_select">
                 <div class="category_select">
                     <h3>分類選擇</h3>
                 </div>
                 <div class="creation_date">
                     <h3>建立日期</h3>
                 </div>
-            </div>
+            </div> -->
             <div class="product_management_list">
                 <div class="product_management_list_header">
                     <h3>所有商品</h3>
@@ -75,6 +75,7 @@ export default {
     },
     editProduct(productId) {
       // 編輯商品的邏輯
+      window.location.href = `backstage_edit_product.html?id=${productId}`; // 導航到編輯商品頁面
     },
     deleteProduct(productId) {
       // 刪除商品的邏輯

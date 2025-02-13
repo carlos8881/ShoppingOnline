@@ -11,11 +11,10 @@ export default {
   data() {
     return {
       menuItems: [
-        { text: '商品管理', href: 'products.html' },
+        { text: '商品管理', href: 'product_management.html' },
         { text: '訂單管理', href: 'orders.html' },
         { text: '會員管理', href: 'members.html' },
-        { text: '優惠券管理', href: 'discounts.html' },
-        { text: '資料統計', href: 'data_statistics.html' }
+        { text: '優惠券管理', href: 'discounts.html' }
       ]
     };
   }

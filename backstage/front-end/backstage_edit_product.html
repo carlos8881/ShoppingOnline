@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>編輯商品</title>
+    <link rel="stylesheet" href="backstage_edit_product_style.css">
+</head>
+<body>
+    <header class="headcontent" id="headApp">
+        <div id="topmenu"></div> <!-- Vue管理頂部選單 -->
+    </header>
+    <div class="main">
+        <div class="sidebar">
+            <div id="system_menu"></div> <!-- Vue管理系統選單 -->
+        </div>
+        <div class="content">
+            <div id="edit_product" class="edit_product">
+                <div class="edit_product_header">
+                    <h2>編輯商品</h2>
+                </div>
+                <div class="edit_product_content">
+                    <form id="editProductForm">
+                        <input type="hidden" id="editProductId">
+                        <label for="editProductName">商品名稱:</label>
+                        <input type="text" id="editProductName" required>
+                        <label for="editProductDescription">商品描述:</label>
+                        <textarea id="editProductDescription" required></textarea>
+                        <label for="editProductPrice">價格:</label>
+                        <input type="number" id="editProductPrice" required>
+                        <button type="submit">保存</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('jwt'); // 從 localStorage 取得 jwt token 儲存於 token 變數
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id'); // 取得 URL 中的商品 ID
+
+            if (productId) {
+                fetch(`http://localhost:8080/api/products/${productId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                .then(response => response.json())
+                .then(product => {
+                    document.getElementById('editProductId').value = product.id;
+                    document.getElementById('editProductName').value = product.name;
+                    document.getElementById('editProductDescription').value = product.description;
+                    document.getElementById('editProductPrice').value = product.price;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+
+            document.getElementById('editProductForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const productId = document.getElementById('editProductId').value;
+                const productName = document.getElementById('editProductName').value;
+                const productDescription = document.getElementById('editProductDescription').value;
+                const productPrice = document.getElementById('editProductPrice').value;
+
+                fetch(`http://localhost:8080/api/products/${productId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        name: productName,
+                        description: productDescription,
+                        price: productPrice
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('商品已更新');
+                        window.location.href = 'product_management.html'; // 更新成功後返回商品管理頁面
+                    } else {
+                        alert('更新失敗');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('更新失敗');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
