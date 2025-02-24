@@ -74,7 +74,7 @@ export default {
       });
     },
     editProduct(productId) {
-      // 編輯商品的邏輯
+      // 轉跳至所選商品的編輯頁面
       window.location.href = `backstage_edit_product.html?id=${productId}`; // 導航到編輯商品頁面
     },
     deleteProduct(productId) {

@@ -18,31 +18,31 @@
         </form>
     </div>
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+        document.getElementById('loginForm').addEventListener('submit', function(event) { // 監聽表單提交事件
+            event.preventDefault(); // 阻止表單提交的默認行為
+            const username = document.getElementById('username').value; // 獲取用戶名存入username變數
+            const password = document.getElementById('password').value; // 獲取密碼存入password變數
 
             // 發送 AJAX 請求到後端的登入 API
             fetch('http://localhost:8080/api/login', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ username, password })
+                method: 'POST', // 請求POST方法
+                headers: {'Content-Type': 'application/json'}, // 請求頭設置Content-Type為application/json
+                body: JSON.stringify({ username, password }) // 請求體設置為JSON格式的用戶名和密碼
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.token) {
+            .then(response => response.json()) // 解析伺服器的回應為JSON格式
+            .then(data => { // 獲取伺服器回應的數據
+                if (data.token) { // 如果伺服器回應的數據中有token字段
                     // 儲存 JWT Token 到 localStorage
-                    localStorage.setItem('jwt', data.token);
-                    alert('登入成功');
-                    window.location.href = 'backstage_home.html';
+                    localStorage.setItem('jwt', data.token); // 將token存入localStorage
+                    alert('登入成功'); // 提示登入成功
+                    window.location.href = 'backstage_home.html'; // 跳轉到後台首頁
                 } else {
-                    alert('用戶名或密碼錯誤');
+                    alert('用戶名或密碼錯誤'); // 提示用戶名或密碼錯誤
                 }
             })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('登入失敗');
+            .catch(error => { // 捕獲請求失敗的錯誤
+                console.error('Error:', error); // 如果請求失敗，輸出錯誤信息到控制台
+                alert('登入失敗'); // 提示登入失敗
             });
         });
     </script>
